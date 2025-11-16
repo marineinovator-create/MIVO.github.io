@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kontak | MIVO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    /* CSS khusus untuk halaman kontak yang diperbaiki */
+    .contact-wrap {
+      padding: 80px 0 40px;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+    }
+
+    .contact-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .contact-hero h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #0077b6, #00b4d8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .contact-hero p {
+      font-size: 1.2rem;
+      color: var(--neutral-dark);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .contact-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .contact-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      height: fit-content;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #f1f5f9;
+    }
+
+    .contact-icon {
+      font-size: 2.5rem;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #00b4d8, #0077b6);
+      border-radius: 16px;
+      color: white;
+    }
+
+    .card-header h3 {
+      color: var(--primary);
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .contact-form {
+      margin-top: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--neutral-dark);
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      background: white;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.875rem;
+      color: var(--neutral);
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+
+    .char-count.warning {
+      color: #f59e0b;
+    }
+
+    .char-count.error {
+      color: #ef4444;
+    }
+
+    .form-actions {
+      margin-top: 2rem;
+    }
+
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-loading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .loading-spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid transparent;
+      border-top: 3px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .contact-details {
+      margin: 2rem 0;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background-color 0.3s ease;
+      border-radius: 8px;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .contact-item:hover {
+      background-color: #f8fafc;
+    }
+
+    .contact-item:last-child {
+      border-bottom: none;
+    }
+
+    .contact-item-icon {
+      font-size: 1.5rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #00b4d8, #0077b6);
+      border-radius: 12px;
+      flex-shrink: 0;
+      color: white;
+    }
+
+    .contact-item-content {
+      flex: 1;
+    }
+
+    .contact-item-content strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .contact-item-content p {
+      margin: 0;
+      color: var(--neutral-dark);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .contact-note {
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border-left: 5px solid var(--accent);
+      margin: 2rem 0;
+      box-shadow: 0 4px 12px rgba(0, 180, 216, 0.1);
+    }
+
+    .contact-note p {
+      margin: 0;
+      color: var(--neutral-dark);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .social-links {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 2px solid #f1f5f9;
+    }
+
+    .social-links h4 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--neutral-dark);
+      transition: all 0.3s;
+      border: 2px solid transparent;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .social-link:hover {
+      background: white;
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .social-link.facebook:hover {
+      border-color: #1877f2;
+      color: #1877f2;
+    }
+
+    .social-link.instagram:hover {
+      border-color: #e4405f;
+      color: #e4405f;
+    }
+
+    .social-link.youtube:hover {
+      border-color: #ff0000;
+      color: #ff0000;
+    }
+
+    .social-link.linkedin:hover {
+      border-color: #0a66c2;
+      color: #0a66c2;
+    }
+
+    .map-section {
+      margin-top: 4rem;
+    }
+
+    .map-container {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+    }
+
+    .map-placeholder {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+    }
+
+    .map-content {
+      text-align: center;
+      z-index: 2;
+    }
+
+    .map-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .map-content h3 {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+
+    .map-content p {
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    /* Form States */
+    .form-group.success input,
+    .form-group.success select,
+    .form-group.success textarea {
+      border-color: #10b981;
+    }
+
+    .form-group.error input,
+    .form-group.error select,
+    .form-group.error textarea {
+      border-color: #ef4444;
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      display: block;
+      font-weight: 500;
+    }
+
+    .form-message {
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .form-message.success {
+      background: #f0fdf4;
+      border: 2px solid #10b981;
+      color: #047857;
+    }
+
+    .form-message.error {
+      background: #fef2f2;
+      border: 2px solid #ef4444;
+      color: #dc2626;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .contact-sections {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .social-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .contact-wrap {
+        padding: 60px 0 20px;
+      }
+      
+      .contact-card {
+        padding: 2rem 1.5rem;
+      }
+      
+      .card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+      }
+      
+      .contact-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+      }
+
+      .contact-hero h1 {
+        font-size: 2rem;
+      }
+
+      .contact-hero p {
+        font-size: 1.1rem;
+      }
+      
+      .contact-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+      }
+      
+      .contact-item-icon {
+        align-self: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-card {
+        padding: 1.5rem 1rem;
+      }
+      
+      .contact-hero h1 {
+        font-size: 1.75rem;
+      }
+      
+      .card-header h3 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a class="brand" href="index.html">
+      <img src="logo mivo.png" alt="MiVO Logo" />
+    </a>
+
+    <nav class="nav">
+      <a href="index.html" class="nav-link">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang Kami</a>
+      <a href="produk.html" class="nav-link">Produk</a>
+      <a href="lokasi.html" class="nav-link">Peta Lokasi</a>
+      <a href="kontak.html" class="nav-link">Kontak</a>
+      <!-- Profile link akan ditambahkan otomatis oleh auth-header.js -->
+      <a href="admin.html" class="nav-link">Dashboard</a>
+    </nav>
+
+    <!-- Auth actions akan diupdate otomatis oleh auth-header.js -->
+    <div class="auth-actions" id="authActions">
+      <!-- Default state sebelum JS load -->
+      <a href="signup.html" class="btn btn-outline">Daftar</a>
+      <a href="login.html" class="btn btn-primary">Login</a>
+    </div>
+  </div>
+</header>
+
+<!--Script-->
+ <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="auth.js"></script>
+<script src="js/auth-header.js"></script>
+
+  
+
+  <!-- MAIN CONTENT -->
+  <main class="contact-wrap">
+    <div class="container">
+      <div class="contact-hero">
+        <h1>Hubungi Kami</h1>
+        <p>Kami siap membantu Anda dengan segala pertanyaan tentang energi biru dan memberikan solusi terbaik untuk kebutuhan Anda</p>
+      </div>
+
+      <div class="contact-sections">
+        <!-- FORM PENGADUAN -->
+        <div class="contact-card">
+          <div class="card-header">
+            <div class="contact-icon">📝</div>
+            <h3>Form Pengaduan & Masukan</h3>
+          </div>
+          <p style="color: var(--neutral-dark); line-height: 1.6; margin-bottom: 1.5rem;">
+            Silakan kirimkan pengaduan, keluhan, kritik, atau masukan Anda melalui form berikut. Tim kami akan merespons dalam 1x24 jam.
+          </p>
+
+          <form id="contactForm" class="contact-form">
+            <div class="form-group">
+              <label for="name">Nama Lengkap</label>
+              <input type="text" id="name" name="name" required placeholder="Masukkan nama lengkap Anda">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required placeholder="email@contoh.com">
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Nomor Telepon/WhatsApp</label>
+              <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxxxx">
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subjek</label>
+              <select id="subject" name="subject" required>
+                <option value="">Pilih subjek...</option>
+                <option value="pengaduan">Pengaduan</option>
+                <option value="masukan">Masukan & Saran</option>
+                <option value="kerjasama">Permintaan Kerjasama</option>
+                <option value="produk">Informasi Produk</option>
+                <option value="lainnya">Lainnya</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Pesan Pengaduan</label>
+              <textarea id="message" name="message" rows="5" required placeholder="Tuliskan pesan Anda di sini..."></textarea>
+              <div class="char-count">
+                <span id="charCount">0</span>/500 karakter
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                <span class="btn-text">Kirim Pengaduan</span>
+                <div class="btn-loading hidden">
+                  <div class="loading-spinner"></div>
+                  Mengirim...
+                </div>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- KOLABORASI & KERJA SAMA -->
+        <div class="contact-card">
+          <div class="card-header">
+            <div class="contact-icon">🤝</div>
+            <h3>Kolaborasi & Kerja Sama</h3>
+          </div>
+          
+          <p style="color: var(--neutral-dark); line-height: 1.6; margin-bottom: 1.5rem;">
+            Jika Anda adalah mitra bisnis, institusi pendidikan, pemerintah, atau pihak lain yang ingin berkolaborasi, silakan hubungi kontak resmi kami:
+          </p>
+
+          <div class="contact-details">
+            <div class="contact-item">
+              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-content">
+                <strong>Alamat Operasional</strong>
+                <p>Desa Lontar, Kec. Tirtayasa, Kab. Serang, Banten</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">🏫</div>
+              <div class="contact-item-content">
+                <strong>Alamat Kantor Pusat</strong>
+                <p>UPI Kampus Serang, Jl. Ciwaru Raya, Serang, Banten</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">📧</div>
+              <div class="contact-item-content">
+                <strong>Email Resmi</strong>
+                <p>MarineInovator@gmail.com</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">📞</div>
+              <div class="contact-item-content">
+                <strong>Telepon/WhatsApp</strong>
+                <p>+62 812-9124-0427</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon">🕒</div>
+              <div class="contact-item-content">
+                <strong>Jam Operasional</strong>
+                <p>Senin - Jumat: 08:00 - 17:00 WIB</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-note">
+            <p>📋 <strong>Informasi Penting:</strong> Semua permintaan kerja sama akan diproses maksimal 1×24 jam oleh tim khusus kolaborasi kami.</p>
+          </div>
+
+          <div class="social-links">
+            <h4>Ikuti Media Sosial Kami</h4>
+            <div class="social-grid">
+              <a href="#" class="social-link facebook" title="Facebook">
+                <span>📘</span> Facebook
+              </a>
+              <a href="#" class="social-link instagram" title="Instagram">
+                <span>📷</span> Instagram
+              </a>
+              <a href="#" class="social-link youtube" title="YouTube">
+                <span>📺</span> YouTube
+              </a>
+              <a href="#" class="social-link linkedin" title="LinkedIn">
+                <span>💼</span> LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAP SECTION -->
+      <div class="map-section">
+        <div class="section-header text-center">
+          <h2>Lokasi Kami</h2>
+          <p class="section-subtitle">Kunjungi lokasi operasional dan kantor pusat MIVO</p>
+        </div>
+        
+        <div class="map-container">
+          <div class="map-placeholder">
+            <div class="map-content">
+              <div class="map-icon">🗺️</div>
+              <h3>Peta Lokasi</h3>
+              <p>Temukan lokasi operasional dan kantor pusat kami</p>
+              <a href="lokasi.html" class="btn btn-outline" style="background: white; color: #667eea; border: 2px solid white;">Lihat Peta Lengkap</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <p>Marine Inovator - Energi Biru untuk Indonesia</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-section">
+            <h4>Navigasi</h4>
+            <a href="index.html">Beranda</a>
+            <a href="tentang.html">Tentang Kami</a>
+            <a href="produk.html">Produk</a>
+          </div>
+          <div class="footer-section">
+            <h4>Dukungan</h4>
+            <a href="lokasi.html">Peta Lokasi</a>
+            <a href="kontak.html">Kontak</a>
+            <a href="admin.html">Dashboard</a>
+          </div>
+          <div class="footer-section">
+            <h4>Legal</h4>
+            <a href="#">Kebijakan Privasi</a>
+            <a href="#">Syarat & Ketentuan</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 MIVO (Marine Inovator) | Energi Biru untuk Indonesia</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Inisialisasi EmailJS
+    (function() {
+      emailjs.init("CQt9_6KuXh7c4V5cW");
+    })();
+
+    // JavaScript untuk form kontak dengan EmailJS
+    class ContactForm {
+      constructor() {
+        this.form = document.getElementById('contactForm');
+        this.messageInput = document.getElementById('message');
+        this.charCount = document.getElementById('charCount');
+        this.submitBtn = document.getElementById('submitBtn');
+        this.btnText = this.submitBtn.querySelector('.btn-text');
+        this.btnLoading = this.submitBtn.querySelector('.btn-loading');
+        
+        this.init();
+      }
+
+      init() {
+        this.setupEventListeners();
+        this.setupCharacterCount();
+      }
+
+      setupEventListeners() {
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        this.messageInput.addEventListener('input', () => this.updateCharacterCount());
+      }
+
+      setupCharacterCount() {
+        this.updateCharacterCount();
+      }
+
+      updateCharacterCount() {
+        const count = this.messageInput.value.length;
+        this.charCount.textContent = count;
+        
+        if (count > 450) {
+          this.charCount.classList.add('error');
+          this.charCount.classList.remove('warning');
+        } else if (count > 400) {
+          this.charCount.classList.add('warning');
+          this.charCount.classList.remove('error');
+        } else {
+          this.charCount.classList.remove('warning', 'error');
+        }
+      }
+
+      async handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!this.validateForm()) {
+          return;
+        }
+
+        this.setLoading(true);
+
+        try {
+          const formData = this.getFormData();
+          
+          // Kirim email menggunakan EmailJS
+          await this.sendEmail(formData);
+          
+          // Simpan ke localStorage untuk dashboard admin
+          await this.saveToLocalStorage(formData);
+          
+          this.showSuccessMessage();
+          this.form.reset();
+          this.updateCharacterCount();
+        } catch (error) {
+          console.error('Error:', error);
+          this.showErrorMessage('Gagal mengirim pesan. Silakan coba lagi.');
+        } finally {
+          this.setLoading(false);
+        }
+      }
+
+      validateForm() {
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value.trim();
+
+        this.clearErrors();
+
+        let isValid = true;
+
+        if (!name) {
+          this.showError('name', 'Nama lengkap wajib diisi');
+          isValid = false;
+        }
+
+        if (!email) {
+          this.showError('email', 'Email wajib diisi');
+          isValid = false;
+        } else if (!this.isValidEmail(email)) {
+          this.showError('email', 'Format email tidak valid');
+          isValid = false;
+        }
+
+        if (!subject) {
+          this.showError('subject', 'Subjek wajib dipilih');
+          isValid = false;
+        }
+
+        if (!message) {
+          this.showError('message', 'Pesan wajib diisi');
+          isValid = false;
+        } else if (message.length < 10) {
+          this.showError('message', 'Pesan terlalu singkat (minimal 10 karakter)');
+          isValid = false;
+        } else if (message.length > 500) {
+          this.showError('message', 'Pesan terlalu panjang (maksimal 500 karakter)');
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      showError(fieldName, message) {
+        const field = document.getElementById(fieldName);
+        const formGroup = field.closest('.form-group');
+        
+        formGroup.classList.add('error');
+        
+        let errorElement = formGroup.querySelector('.error-message');
+        if (!errorElement) {
+          errorElement = document.createElement('div');
+          errorElement.className = 'error-message';
+          formGroup.appendChild(errorElement);
+        }
+        
+        errorElement.textContent = message;
+      }
+
+      clearErrors() {
+        const errorElements = this.form.querySelectorAll('.error-message');
+        errorElements.forEach(element => element.remove());
+        
+        const errorGroups = this.form.querySelectorAll('.form-group.error');
+        errorGroups.forEach(group => group.classList.remove('error'));
+      }
+
+      isValidEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+      }
+
+      getFormData() {
+        return {
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          subject: document.getElementById('subject').value,
+          message: document.getElementById('message').value.trim(),
+          waktu: new Date().toLocaleString('id-ID'),
+          timestamp: new Date().getTime()
+        };
+      }
+
+      async sendEmail(formData) {
+        const templateParams = {
+          to_email: 'marineinovator@gmail.com',
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          waktu: formData.waktu,
+          reply_to: formData.email
+        };
+
+        try {
+          const response = await emailjs.send(
+            'service_6q79ysf',
+            'template_8xn2mj4',
+            templateParams
+          );
+          
+          console.log('Email berhasil dikirim:', response);
+          return response;
+        } catch (error) {
+          console.error('Gagal mengirim email:', error);
+          throw new Error('Gagal mengirim email notifikasi');
+        }
+      }
+
+      async saveToLocalStorage(formData) {
+        try {
+          let messages = JSON.parse(localStorage.getItem('messages')) || [];
+          
+          // Tambah ID unik untuk setiap pesan
+          const messageWithId = {
+            id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+            ...formData,
+            status: 'new',
+            read: false
+          };
+          
+          messages.unshift(messageWithId); // Tambah di awal array
+          localStorage.setItem('messages', JSON.stringify(messages));
+          
+          console.log('Pesan disimpan ke localStorage:', messageWithId);
+          return messageWithId;
+        } catch (error) {
+          console.error('Gagal menyimpan ke localStorage:', error);
+          throw new Error('Gagal menyimpan pesan');
+        }
+      }
+
+      setLoading(loading) {
+        if (loading) {
+          this.btnText.classList.add('hidden');
+          this.btnLoading.classList.remove('hidden');
+          this.submitBtn.disabled = true;
+        } else {
+          this.btnText.classList.remove('hidden');
+          this.btnLoading.classList.add('hidden');
+          this.submitBtn.disabled = false;
+        }
+      }
+
+      showSuccessMessage() {
+        this.showMessage('Pesan berhasil dikirim! Kami akan merespons dalam 1x24 jam. Notifikasi email telah dikirim ke tim kami.', 'success');
+      }
+
+      showErrorMessage(message) {
+        this.showMessage(message, 'error');
+      }
+
+      showMessage(text, type) {
+        const existingMessage = this.form.querySelector('.form-message');
+        if (existingMessage) {
+          existingMessage.remove();
+        }
+
+        const messageElement = document.createElement('div');
+        messageElement.className = `form-message ${type}`;
+        messageElement.textContent = text;
+        
+        this.form.insertBefore(messageElement, this.form.querySelector('.form-actions'));
+
+        setTimeout(() => {
+          if (messageElement.parentNode) {
+            messageElement.remove();
+          }
+        }, 8000); // Perpanjang waktu tampil untuk success message
+      }
+    }
+
+    // Initialize contact form when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      new ContactForm();
+    });
+  </script>
+</body>
+</html>

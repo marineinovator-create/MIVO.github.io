@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biogas| MIVO - Marine Inovator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* HANYA style tambahan untuk elemen interaktif baru */
+    
+    /* Enhanced Diagram Process */
+    .interactive-diagram {
+      width: 100%;
+      height: 400px;
+      position: relative;
+      margin: 3rem 0;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .process-step-interactive {
+      position: absolute;
+      width: 140px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .process-step-interactive:hover {
+      transform: translateY(-10px) scale(1.05);
+    }
+    
+    .process-step-interactive.active {
+      transform: scale(1.1);
+      z-index: 10;
+    }
+    
+    .step-1 { top: 50px; left: 8%; }
+    .step-2 { top: 50px; left: 36%; }
+    .step-3 { top: 50px; left: 64%; }
+    .step-4 { top: 250px; left: 36%; }
+    
+    .step-icon-wrapper {
+      width: 90px;
+      height: 90px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+      font-size: 2rem;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .process-step-interactive:hover .step-icon-wrapper {
+      background: #2563eb;
+      box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
+    }
+    
+    .step-icon-wrapper::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+    }
+    
+    .process-step-interactive:hover .step-icon-wrapper::after {
+      transform: rotate(45deg) translate(50%, 50%);
+    }
+    
+    .step-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+    
+    .step-detail {
+      font-size: 0.8rem;
+      color: #64748b;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      height: 0;
+    }
+    
+    .process-step-interactive.active .step-detail {
+      opacity: 1;
+      transform: translateY(0);
+      height: auto;
+    }
+    
+    .animated-connector {
+      position: absolute;
+      background: #3b82f6;
+      opacity: 0.6;
+    }
+    
+    .connector-horizontal {
+      height: 3px;
+      top: 95px;
+      animation: flowHorizontal 3s infinite linear;
+    }
+    
+    .connector-vertical {
+      width: 3px;
+      left: 50%;
+      animation: flowVertical 3s infinite linear;
+    }
+    
+    .connector-1 { width: 26%; left: 19%; }
+    .connector-2 { width: 26%; left: 45%; }
+    .connector-3 { height: 150px; top: 95px; left: 50%; }
+    .connector-4 { width: 26%; left: 36%; top: 245px; }
+    
+    @keyframes flowHorizontal {
+      0% { background-position: -100% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    @keyframes flowVertical {
+      0% { background-position: 0 -100%; }
+      100% { background-position: 0 200%; }
+    }
+    
+    /* Enhanced Data Visualization */
+    .data-visualization-enhanced {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      transition: left 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+    }
+    
+    .stat-card:hover::before {
+      left: 0;
+    }
+    
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .stat-icon {
+      font-size: 1.5rem;
+      opacity: 0.8;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+    
+    /* Interactive Chart */
+    .interactive-chart {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .chart-bars {
+      display: flex;
+      align-items: end;
+      height: 200px;
+      gap: 1.5rem;
+      margin: 2rem 0;
+      padding: 0 1rem;
+    }
+    
+    .chart-bar-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .bar {
+      width: 100%;
+      background: linear-gradient(to top, #3b82f6, #60a5fa);
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      transition: all 0.4s ease;
+      min-height: 20px;
+    }
+    
+    .chart-bar-item:hover .bar {
+      transform: scaleY(1.05);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .bar-label {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    .bar-value {
+      position: absolute;
+      top: -25px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .chart-bar-item:hover .bar-value {
+      opacity: 1;
+    }
+    
+    /* Enhanced FAQ */
+    .faq-enhanced {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .faq-item-enhanced {
+      margin-bottom: 1rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-item-enhanced:hover {
+      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+    }
+    
+    .faq-item-enhanced.active {
+      border-color: #3b82f6;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+    }
+    
+    .faq-question-enhanced {
+      padding: 1.5rem;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: #1e293b;
+      transition: background 0.3s ease;
+    }
+    
+    .faq-question-enhanced:hover {
+      background: #f8fafc;
+    }
+    
+    .faq-answer-enhanced {
+      padding: 0 1.5rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: white;
+    }
+    
+    .faq-item-enhanced.active .faq-answer-enhanced {
+      padding: 1.5rem;
+      max-height: 500px;
+    }
+    
+    .faq-toggle-enhanced {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #3b82f6;
+    }
+    
+    .faq-item-enhanced.active .faq-toggle-enhanced {
+      transform: rotate(180deg);
+    }
+    
+    /* Process Timeline */
+    .process-timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 3rem 0;
+      padding: 0 2rem;
+    }
+    
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 50px;
+      right: 50px;
+      height: 3px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+    
+    .timeline-item {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+    
+    .timeline-dot {
+      width: 60px;
+      height: 60px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .timeline-dot:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+    
+    .timeline-content {
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+    
+    .timeline-item:hover .timeline-content {
+      opacity: 1;
+    }
+    
+    /* Improved Diagram Structure */
+    .diagram-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .diagram-flow {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+    }
+    
+    .diagram-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 20%;
+      position: relative;
+    }
+    
+    .diagram-arrow {
+      position: absolute;
+      top: 40px;
+      right: -30px;
+      font-size: 1.5rem;
+      color: #3b82f6;
+    }
+    
+    .diagram-step:last-child .diagram-arrow {
+      display: none;
+    }
+    
+    .diagram-icon {
+      width: 80px;
+      height: 80px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .interactive-diagram {
+        height: 600px;
+      }
+      
+      .process-step-interactive {
+        position: relative;
+        margin-bottom: 2rem;
+        left: auto !important;
+        top: auto !important;
+        width: 100%;
+      }
+      
+      .animated-connector {
+        display: none;
+      }
+      
+      .process-timeline {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      
+      .process-timeline::before {
+        display: none;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .chart-bars {
+        flex-direction: column;
+        height: auto;
+        gap: 1rem;
+      }
+      
+      .chart-bar-item {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .bar {
+        height: 40px !important;
+        width: 100%;
+        border-radius: 8px;
+      }
+      
+      .bar-value {
+        position: static;
+        opacity: 1;
+        width: auto;
+      }
+      
+      .diagram-flow {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      
+      .diagram-step {
+        width: 100%;
+      }
+      
+      .diagram-arrow {
+        position: static;
+        transform: rotate(90deg);
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER - DENGAN PENYESUAIAN MENU -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="index.html">
+        <img src="logo mivo.png" alt="MIVO Logo" />
+      </a>
+
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="produk.html" class="nav-link active">Produk</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- PRODUCT HERO - DIUBAH UNTUK MENGHAPUS ELEMEN PENJUALAN -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" class="breadcrumb-link">Beranda</a>
+        <a href="produk.html" class="breadcrumb-link">Produk</a>
+        <span class="breadcrumb-current">Biogas</span>
+      </div>
+
+        <div class="product-info">
+          <div class="product-header">
+            <div class="product-badge">Teknologi Inovatif</div>
+            <h1>Biogas</h1>
+            <p class="product-subtitle">Solusi Energi Terbarukan untuk Kawasan Pesisir Indonesia</p>
+          </div>
+
+          <div class="product-description">
+            <p>Sistem biogas inovatif yang mengkonversi limbah perikanan menjadi energi bersih dan pupuk organik. Dirancang khusus untuk kondisi pesisir Indonesia dengan efisiensi tinggi dan perawatan mudah.</p>
+          </div>
+
+          <div class="product-specs">
+            <div class="spec-item">
+              <span class="spec-icon">🔥</span>
+              <div class="spec-details">
+                <strong>2-5 m³/hari</strong>
+                <span>Produksi Biogas</span>
+              </div>
+            </div>
+            <div class="spec-item">
+              <span class="spec-icon">💰</span>
+              <div class="spec-details">
+                <strong>70% lebih hemat</strong>
+                <span>Penghematan Biaya</span>
+              </div>
+            </div>
+            <div class="spec-item">
+              <span class="spec-icon">🌿</span>
+              <div class="spec-details">
+                <strong>Ramah Lingkungan</strong>
+                <span>Zero Waste Process</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-meta">
+            <div class="meta-item">
+              <span class="meta-label">Ketersediaan:</span>
+              <span class="meta-value available">Tersedia</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Instalasi:</span>
+              <span class="meta-value">2-4 minggu</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Garansi:</span>
+              <span class="meta-value">2 tahun</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPROVED DIAGRAM SECTION -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="section-header">
+        <h2>Proses Konversi Biogas</h2>
+        <p>Alur lengkap konversi limbah perikanan menjadi energi terbarukan</p>
+      </div>
+
+      <div class="diagram-container">
+        <div class="diagram-flow">
+          <div class="diagram-step">
+            <div class="diagram-icon">
+              <i class="fas fa-fish"></i>
+            </div>
+            <h4>Input Limbah</h4>
+            <p>Limbah ikan 20-50 kg/hari sebagai bahan baku utama</p>
+            <div class="diagram-arrow">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+          
+          <div class="diagram-step">
+            <div class="diagram-icon">
+              <i class="fas fa-vial"></i>
+            </div>
+            <h4>Fermentasi Anaerobik</h4>
+            <p>Proses biologis tanpa oksigen pada suhu 35-40°C</p>
+            <div class="diagram-arrow">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+          
+          <div class="diagram-step">
+            <div class="diagram-icon">
+              <i class="fas fa-fire"></i>
+            </div>
+            <h4>Produksi Biogas</h4>
+            <p>Gas metana 55-65% untuk energi memasak dan penerangan</p>
+            <div class="diagram-arrow">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+          
+          <div class="diagram-step">
+            <div class="diagram-icon">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <h4>Pupuk Organik</h4>
+            <p>Digestate menjadi pupuk cair berkualitas tinggi</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENHANCED DATA VISUALIZATION -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="data-visualization-enhanced">
+        <div class="section-header">
+          <h2>Dampak dan Performa Sistem</h2>
+          <p>Data nyata penghematan dan efisiensi reaktor biogas MIVO</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">
+              <i class="fas fa-chart-line stat-icon"></i>
+              70%
+            </div>
+            <div class="stat-label">Pengurangan Emisi Gas Rumah Kaca</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">
+              <i class="fas fa-recycle stat-icon"></i>
+              50 kg
+            </div>
+            <div class="stat-label">Limbah Perikanan Terolah per Hari</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">
+              <i class="fas fa-bolt stat-icon"></i>
+              5 m³
+            </div>
+            <div class="stat-label">Produksi Biogas Maksimal per Hari</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">
+              <i class="fas fa-calendar-alt stat-icon"></i>
+              2 tahun
+            </div>
+            <div class="stat-label">ROI (Return on Investment)</div>
+          </div>
+        </div>
+
+        <div class="interactive-chart">
+          <h3>Perbandingan Biaya Energi Bulanan</h3>
+          <p>Hover untuk melihat detail biaya setiap sumber energi</p>
+          
+          <div class="chart-bars">
+            <div class="chart-bar-item">
+              <div class="bar" style="height: 70%;">
+                <div class="bar-value">Rp 80.000</div>
+              </div>
+              <div class="bar-label">Biogas</div>
+            </div>
+            <div class="chart-bar-item">
+              <div class="bar" style="height: 85%; background: linear-gradient(to top, #6366f1, #818cf8);">
+                <div class="bar-value">Rp 100.000</div>
+              </div>
+              <div class="bar-label">LPG 3kg</div>
+            </div>
+            <div class="chart-bar-item">
+              <div class="bar" style="height: 100%; background: linear-gradient(to top, #f59e0b, #fbbf24);">
+                <div class="bar-value">Rp 120.000</div>
+              </div>
+              <div class="bar-label">Minyak Tanah</div>
+            </div>
+            <div class="chart-bar-item">
+              <div class="bar" style="height: 120%; background: linear-gradient(to top, #ef4444, #f87171);">
+                <div class="bar-value">Rp 150.000</div>
+              </div>
+              <div class="bar-label">Listrik</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS TIMELINE -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="section-header">
+        <h2>Timeline Implementasi</h2>
+        <p>Proses instalasi dan implementasi reaktor biogas MIVO</p>
+      </div>
+
+      <div class="process-timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="timeline-content">
+            <h4>Minggu 1-2</h4>
+            <p>Survey lokasi dan persiapan instalasi</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">
+            <i class="fas fa-tools"></i>
+          </div>
+          <div class="timeline-content">
+            <h4>Minggu 2-3</h4>
+            <p>Instalasi reaktor dan sistem pendukung</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="timeline-content">
+            <h4>Minggu 3-4</h4>
+            <p>Pelatihan operator dan uji coba sistem</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENHANCED FAQ SECTION -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="faq-enhanced">
+        <div class="section-header">
+          <h2>Pertanyaan Umum</h2>
+          <p>Informasi lengkap tentang Reaktor Biogas MIVO</p>
+        </div>
+
+        <div class="faq-container">
+          <div class="faq-item-enhanced">
+            <div class="faq-question-enhanced">
+              <span>Bagaimana cara kerja reaktor biogas MIVO?</span>
+              <span class="faq-toggle-enhanced"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer-enhanced">
+              <p>Reaktor biogas MIVO bekerja melalui proses fermentasi anaerobik, di mana bakteri mengurai limbah perikanan dalam kondisi tanpa oksigen. Proses ini menghasilkan biogas (terutama metana) yang dapat digunakan sebagai sumber energi, serta pupuk organik dari sisa proses.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item-enhanced">
+            <div class="faq-question-enhanced">
+              <span>Berapa lama waktu yang dibutuhkan untuk instalasi?</span>
+              <span class="faq-toggle-enhanced"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer-enhanced">
+              <p>Instalasi reaktor biogas MIVO membutuhkan waktu 2-4 minggu, tergantung pada kondisi lokasi dan ketersediaan bahan baku. Tim teknis kami akan melakukan survei lokasi terlebih dahulu untuk memastikan instalasi berjalan optimal.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item-enhanced">
+            <div class="faq-question-enhanced">
+              <span>Apakah sistem ini memerlukan perawatan khusus?</span>
+              <span class="faq-toggle-enhanced"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="faq-answer-enhanced">
+              <p>Reaktor biogas MIVO dirancang dengan sistem perawatan yang sederhana. Pemantauan rutin suhu dan pH, serta pengisian bahan baku secara berkala adalah hal utama yang perlu diperhatikan. Tim kami memberikan pelatihan lengkap untuk operator lokal.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <script>
+    // Interactive Diagram
+    document.querySelectorAll('.process-step-interactive').forEach(step => {
+      step.addEventListener('click', function() {
+        // Remove active class from all steps
+        document.querySelectorAll('.process-step-interactive').forEach(s => {
+          s.classList.remove('active');
+        });
+        
+        // Add active class to clicked step
+        this.classList.add('active');
+      });
+    });
+
+    // Enhanced FAQ
+    document.querySelectorAll('.faq-question-enhanced').forEach(question => {
+      question.addEventListener('click', () => {
+        const item = question.parentNode;
+        item.classList.toggle('active');
+      });
+    });
+
+    // Animated chart bars on load
+    window.addEventListener('load', () => {
+      const bars = document.querySelectorAll('.bar');
+      bars.forEach(bar => {
+        const targetHeight = bar.style.height;
+        bar.style.height = '0%';
+        
+        setTimeout(() => {
+          bar.style.height = targetHeight;
+        }, 500);
+      });
+    });
+
+    // Add floating animation to timeline dots
+    document.querySelectorAll('.timeline-dot').forEach((dot, index) => {
+      dot.style.animation = `float 3s ease-in-out ${index * 0.5}s infinite alternate`;
+    });
+
+    // Add CSS for floating animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-10px); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

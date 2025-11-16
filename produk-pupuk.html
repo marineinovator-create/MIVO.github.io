@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pupuk Cair | MIVO - Marine Inovator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Additional Styles for Fertilizer Product Page */
+    .benefits-section {
+      padding: var(--space-2xl) 0;
+      background: var(--neutral-light);
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-xl);
+    }
+
+    .benefit-card {
+      background: var(--pure-white);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-normal);
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .benefit-icon {
+      font-size: 3rem;
+      margin-bottom: var(--space-md);
+    }
+
+    .benefit-card h4 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-md);
+    }
+
+    .benefit-card ul {
+      list-style: none;
+      padding: 0;
+      margin-top: var(--space-md);
+    }
+
+    .benefit-card li {
+      padding: var(--space-xs) 0;
+      position: relative;
+      padding-left: var(--space-lg);
+    }
+
+    .benefit-card li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success-green);
+      font-weight: bold;
+    }
+
+    .composition-section {
+      padding: var(--space-2xl) 0;
+      background: var(--pure-white);
+    }
+
+    .composition-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+
+    .composition-content h2 {
+      font-size: 2rem;
+      color: var(--primary-blue);
+      margin-bottom: var(--space-lg);
+    }
+
+    .nutrient-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+      margin-top: var(--space-xl);
+    }
+
+    .nutrient-category h4 {
+      color: var(--neutral-dark);
+      margin-bottom: var(--space-lg);
+    }
+
+    .nutrient-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .nutrient-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--neutral-light);
+      border-radius: var(--radius-md);
+    }
+
+    .nutrient-name {
+      width: 120px;
+      font-weight: var(--font-weight-semibold);
+      color: var(--neutral-dark);
+    }
+
+    .nutrient-value {
+      width: 60px;
+      text-align: right;
+      color: var(--primary-accent);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .nutrient-bar {
+      flex: 1;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .nutrient-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-blue), var(--primary-accent));
+      border-radius: 4px;
+    }
+
+    .quality-certifications {
+      background: var(--neutral-light);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+    }
+
+    .quality-certifications h4 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-xl);
+    }
+
+    .certification-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .certification-item {
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .cert-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--pure-white);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .certification-item h5 {
+      margin: 0 0 var(--space-xs) 0;
+      color: var(--neutral-dark);
+    }
+
+    .certification-item p {
+      margin: 0;
+      color: var(--neutral-gray);
+      font-size: 0.875rem;
+    }
+
+    .application-guide {
+      padding: var(--space-2xl) 0;
+      background: var(--neutral-light);
+    }
+
+    .application-tabs {
+      display: flex;
+      gap: var(--space-md);
+      margin-bottom: var(--space-2xl);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .app-tab-btn {
+      padding: var(--space-md) var(--space-lg);
+      background: var(--pure-white);
+      border: 2px solid var(--primary-blue);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: var(--font-weight-semibold);
+      color: var(--primary-blue);
+      transition: var(--transition-fast);
+    }
+
+    .app-tab-btn.active,
+    .app-tab-btn:hover {
+      background: var(--primary-blue);
+      color: white;
+    }
+
+    .app-tab-pane {
+      display: none;
+    }
+
+    .app-tab-pane.active {
+      display: block;
+    }
+
+    .app-guide {
+      background: var(--pure-white);
+      padding: var(--space-2xl);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .app-recommendation h4 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-lg);
+    }
+
+    .dosage-info {
+      display: flex;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+      flex-wrap: wrap;
+    }
+
+    .dosage-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .dosage-label {
+      font-weight: var(--font-weight-semibold);
+      color: var(--neutral-dark);
+    }
+
+    .dosage-value {
+      color: var(--primary-accent);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .app-schedule h4 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-lg);
+    }
+
+    .schedule-steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .schedule-step {
+      display: flex;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      background: var(--neutral-light);
+      border-radius: var(--radius-lg);
+    }
+
+    .step-phase {
+      width: 120px;
+      font-weight: var(--font-weight-semibold);
+      color: var(--primary-blue);
+      flex-shrink: 0;
+    }
+
+    .test-results {
+      padding: var(--space-2xl) 0;
+      background: var(--pure-white);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .result-card {
+      background: var(--neutral-light);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+
+    .result-value {
+      font-size: 3rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .result-label {
+      font-weight: var(--font-weight-semibold);
+      color: var(--neutral-dark);
+      margin-bottom: var(--space-xs);
+    }
+
+    .result-desc {
+      color: var(--neutral-gray);
+      font-size: 0.875rem;
+    }
+
+    .case-studies {
+      margin-top: var(--space-2xl);
+    }
+
+    .case-studies h4 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-xl);
+    }
+
+    .case-study {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-xl);
+      background: var(--neutral-light);
+      padding: var(--space-2xl);
+      border-radius: var(--radius-lg);
+    }
+
+    .case-image {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .case-image img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .case-content h5 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-md);
+    }
+
+    .case-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-lg);
+      font-size: 0.875rem;
+      color: var(--neutral-gray);
+    }
+
+    /* New Styles for Information Focus */
+    .tech-specs {
+      background: var(--neutral-light);
+      padding: var(--space-2xl) 0;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-xl);
+      margin-top: var(--space-xl);
+    }
+
+    .spec-card {
+      background: var(--pure-white);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .spec-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-md);
+      color: var(--primary-blue);
+    }
+
+    .spec-value {
+      font-size: 2rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .spec-label {
+      color: var(--neutral-dark);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .production-process {
+      padding: var(--space-2xl) 0;
+      background: var(--pure-white);
+    }
+
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+      margin-top: var(--space-xl);
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .step-number {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+    }
+
+    .step-content h4 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-sm);
+    }
+
+    @media (max-width: 1024px) {
+      .composition-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .case-study {
+        grid-template-columns: 1fr;
+      }
+
+      .dosage-info {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .schedule-step {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .specs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-step {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .step-number {
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .application-tabs {
+        flex-direction: column;
+      }
+
+      .app-tab-btn {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="index.html">
+        <img src="logo mivo.png" alt="MIVO Logo" />
+      </a>
+
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="produk.html" class="nav-link active">Produk</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- PRODUCT HERO - DIUBAH UNTUK INFORMASI SAJA -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" class="breadcrumb-link">Beranda</a>
+        <a href="produk.html" class="breadcrumb-link">Produk</a>
+        <span class="breadcrumb-current">Pupuk Cair</span>
+      </div>
+
+     
+        <div class="product-info">
+          <div class="product-badge">Organik</div>
+          <h1>Pupuk Cair</h1>
+          <p class="product-subtitle">Hasil Samping Proses Biogas yang Kaya Nutrisi</p>
+
+          <p class="product-description">
+            Pupuk organik cair premium hasil samping proses biogas MIVO, kaya akan nutrisi 
+            makro-mikro dan mikroorganisme menguntungkan untuk kesuburan tanah dan 
+            produktivitas tanaman pesisir.
+          </p>
+
+          <div class="product-highlights">
+            <div class="highlight">
+              <span class="highlight-icon">🌿</span>
+              <span>100% Organik & Ramah Lingkungan</span>
+            </div>
+            <div class="highlight">
+              <span class="highlight-icon">🧪</span>
+              <span>Kandungan NPK 3-2-2 + Mikronutrien</span>
+            </div>
+            <div class="highlight">
+              <span class="highlight-icon">🦠</span>
+              <span>Mikroba Probiotik 10^8 CFU/ml</span>
+            </div>
+            <div class="highlight">
+              <span class="highlight-icon">📜</span>
+              <span>Sertifikasi Organik Nasional</span>
+            </div>
+          </div>
+
+          <div class="product-meta">
+            <div class="meta-item">
+              <span class="meta-label">Status:</span>
+              <span class="meta-value available">Tersedia</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Kategori:</span>
+              <span class="meta-value">Pertanian Organik</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Tahun Produksi:</span>
+              <span class="meta-value">2024</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNICAL SPECIFICATIONS -->
+  <section class="tech-specs">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Spesifikasi Teknis</h2>
+        <p class="section-subtitle">Data teknis lengkap Pupuk Cair Laut MIVO</p>
+      </div>
+
+      <div class="specs-grid">
+        <div class="spec-card">
+          <div class="spec-icon">
+            <i class="fas fa-flask"></i>
+          </div>
+          <div class="spec-value">NPK 3-2-2</div>
+          <div class="spec-label">Kandungan Nutrisi Makro</div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-icon">
+            <i class="fas fa-microscope"></i>
+          </div>
+          <div class="spec-value">10^8 CFU/ml</div>
+          <div class="spec-label">Mikroorganisme Menguntungkan</div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-icon">
+            <i class="fas fa-weight-hanging"></i>
+          </div>
+          <div class="spec-value">1.15 g/cm³</div>
+          <div class="spec-label">Massa Jenis</div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-icon">
+            <i class="fas fa-vial"></i>
+          </div>
+          <div class="spec-value">6.5-7.2</div>
+          <div class="spec-label">pH Optimal</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTION PROCESS -->
+  <section class="production-process">
+    <div class="container">
+      <div class="section-header">
+        <h2>Proses Produksi</h2>
+        <p class="section-subtitle">Alur produksi berkelanjutan dari limbah perikanan menjadi pupuk organik</p>
+      </div>
+
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Koleksi Limbah Perikanan</h4>
+            <p>Limbah ikan segar dikumpulkan dari industri perikanan lokal dengan standar higienis tinggi</p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Fermentasi Anaerobik</h4>
+            <p>Proses biologis dalam reaktor biogas yang menghasilkan energi dan bahan baku pupuk</p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Pemurnian & Stabilisasi</h4>
+            <p>Pemisahan dan pengolahan digestate menjadi pupuk cair dengan nutrisi seimbang</p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Quality Control</h4>
+            <p>Pengujian laboratorium untuk memastikan kualitas dan keamanan produk akhir</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS SECTION -->
+  <section class="benefits-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Manfaat Pupuk Cair Laut MIVO</h2>
+        <p class="section-subtitle">Solusi lengkap untuk pertanian berkelanjutan di wilayah pesisir</p>
+      </div>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🌱</div>
+          <h4>Peningkatan Kesuburan Tanah</h4>
+          <p>Memperbaiki struktur tanah, meningkatkan kapasitas menahan air, dan menambah bahan organik tanah</p>
+          <ul>
+            <li>Soil conditioning alami</li>
+            <li>Peningkatan C-organik</li>
+            <li>Perbaikan struktur tanah berpasir</li>
+          </ul>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">📈</div>
+          <h4>Pertumbuhan Tanaman Optimal</h4>
+          <p>Menyediakan nutrisi lengkap untuk fase vegetatif dan generatif tanaman</p>
+          <ul>
+            <li>Pertumbuhan akar lebih kuat</li>
+            <li>Daun lebih hijau dan sehat</li>
+            <li>Pembungan dan buah lebih banyak</li>
+          </ul>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">🛡️</div>
+          <h4>Ketahanan terhadap Stress</h4>
+          <p>Meningkatkan ketahanan tanaman terhadap kondisi lingkungan yang tidak menguntungkan</p>
+          <ul>
+            <li>Toleransi kekeringan</li>
+            <li>Ketahanan terhadap penyakit</li>
+            <li>Adaptasi kondisi salinitas</li>
+          </ul>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">🌊</div>
+          <h4>Khusus untuk Lahan Pesisir</h4>
+          <p>Formulasi khusus untuk mengatasi tantangan pertanian di wilayah pesisir</p>
+          <ul>
+            <li>Adaptasi tanah berpasir</li>
+            <li>Toleransi salinitas</li>
+            <li>Efisiensi penggunaan air</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPOSITION ANALYSIS -->
+  <section class="composition-section">
+    <div class="container">
+      <div class="composition-grid">
+        <div class="composition-content">
+          <h2>Analisis Komposisi & Kandungan</h2>
+          <p>
+            Pupuk Cair Laut MIVO mengandung nutrisi lengkap yang dibutuhkan tanaman 
+            dengan formulasi seimbang untuk hasil optimal.
+          </p>
+
+          <div class="nutrient-breakdown">
+            <div class="nutrient-category">
+              <h4>Nutrisi Makro</h4>
+              <div class="nutrient-list">
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Nitrogen (N)</span>
+                  <span class="nutrient-value">3%</span>
+                  <div class="nutrient-bar">
+                    <div class="nutrient-fill" style="width: 60%"></div>
+                  </div>
+                </div>
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Fosfor (P₂O₅)</span>
+                  <span class="nutrient-value">2%</span>
+                  <div class="nutrient-bar">
+                    <div class="nutrient-fill" style="width: 40%"></div>
+                  </div>
+                </div>
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Kalium (K₂O)</span>
+                  <span class="nutrient-value">2%</span>
+                  <div class="nutrient-bar">
+                    <div class="nutrient-fill" style="width: 40%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="nutrient-category">
+              <h4>Nutrisi Mikro & Lainnya</h4>
+              <div class="nutrient-list">
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Kalsium (Ca)</span>
+                  <span class="nutrient-value">0.5%</span>
+                </div>
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Magnesium (Mg)</span>
+                  <span class="nutrient-value">0.3%</span>
+                </div>
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Sulfur (S)</span>
+                  <span class="nutrient-value">0.2%</span>
+                </div>
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Boron (B)</span>
+                  <span class="nutrient-value">50 ppm</span>
+                </div>
+                <div class="nutrient-item">
+                  <span class="nutrient-name">Mikroba</span>
+                  <span class="nutrient-value">10^8 CFU/ml</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="composition-visual">
+          <div class="quality-certifications">
+            <h4>Sertifikasi & Standar Kualitas</h4>
+            <div class="certification-list">
+              <div class="certification-item">
+                <div class="cert-icon">📜</div>
+                <div>
+                  <h5>SNI Organik</h5>
+                  <p>Standar Nasional Indonesia untuk produk organik</p>
+                </div>
+              </div>
+              <div class="certification-item">
+                <div class="cert-icon">🌍</div>
+                <div>
+                  <h5>Eco-Friendly</h5>
+                  <p>Ramah lingkungan dan berkelanjutan</p>
+                </div>
+              </div>
+              <div class="certification-item">
+                <div class="cert-icon">🔬</div>
+                <div>
+                  <h5>Laboratorium Tested</h5>
+                  <p>Teruji di laboratorium terakreditasi</p>
+                </div>
+              </div>
+              <div class="certification-item">
+                <div class="cert-icon">👨‍🌾</div>
+                <div>
+                  <h5>Farmer Proven</h5>
+                  <p>Terbukti di lapangan oleh petani</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLICATION GUIDE -->
+  <section class="application-guide">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Panduan Aplikasi</h2>
+        <p class="section-subtitle">Cara penggunaan yang tepat untuk hasil maksimal</p>
+      </div>
+
+      <div class="application-tabs">
+        <button class="app-tab-btn active" data-app="vegetables">Sayuran</button>
+        <button class="app-tab-btn" data-app="rice">Padi</button>
+        <button class="app-tab-btn" data-app="fruits">Buah-buahan</button>
+        <button class="app-tab-btn" data-app="aquaculture">Tambak</button>
+      </div>
+
+      <div class="application-content">
+        <!-- Vegetables Tab -->
+        <div class="app-tab-pane active" id="vegetables">
+          <div class="app-guide">
+            <div class="app-recommendation">
+              <h4>Rekomendasi untuk Tanaman Sayuran</h4>
+              <div class="dosage-info">
+                <div class="dosage-item">
+                  <span class="dosage-label">Dosis:</span>
+                  <span class="dosage-value">5-10 ml/liter air</span>
+                </div>
+                <div class="dosage-item">
+                  <span class="dosage-label">Frekuensi:</span>
+                  <span class="dosage-value">7-10 hari sekali</span>
+                </div>
+                <div class="dosage-item">
+                  <span class="dosage-label">Aplikasi:</span>
+                  <span class="dosage-value">Penyemprotan daun & kocor akar</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-schedule">
+              <h4>Jadwal Aplikasi</h4>
+              <div class="schedule-steps">
+                <div class="schedule-step">
+                  <div class="step-phase">Fase Pembibitan</div>
+                  <div class="step-instruction">Semprot 5 ml/liter setiap 10 hari</div>
+                </div>
+                <div class="schedule-step">
+                  <div class="step-phase">Fase Vegetatif</div>
+                  <div class="step-instruction">Semprot 7 ml/liter setiap 7 hari</div>
+                </div>
+                <div class="schedule-step">
+                  <div class="step-phase">Fase Generatif</div>
+                  <div class="step-instruction">Kocor 10 ml/liter setiap 10 hari</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rice Tab -->
+        <div class="app-tab-pane" id="rice">
+          <div class="app-guide">
+            <div class="app-recommendation">
+              <h4>Rekomendasi untuk Tanaman Padi</h4>
+              <div class="dosage-info">
+                <div class="dosage-item">
+                  <span class="dosage-label">Dosis:</span>
+                  <span class="dosage-value">5 liter/hektar</span>
+                </div>
+                <div class="dosage-item">
+                  <span class="dosage-label">Frekuensi:</span>
+                  <span class="dosage-value">3 kali per musim</span>
+                </div>
+                <div class="dosage-item">
+                  <span class="dosage-label">Aplikasi:</span>
+                  <span class="dosage-value">Dikocor ke air sawah</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-schedule">
+              <h4>Jadwal Aplikasi</h4>
+              <div class="schedule-steps">
+                <div class="schedule-step">
+                  <div class="step-phase">14 HST</div>
+                  <div class="step-instruction">Aplikasi pertama 2 liter/hektar</div>
+                </div>
+                <div class="schedule-step">
+                  <div class="step-phase">35 HST</div>
+                  <div class="step-instruction">Aplikasi kedua 2 liter/hektar</div>
+                </div>
+                <div class="schedule-step">
+                  <div class="step-phase">55 HST</div>
+                  <div class="step-instruction">Aplikasi ketiga 1 liter/hektar</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional tabs content would follow similar structure -->
+      </div>
+    </div>
+  </section>
+
+  <!-- TEST RESULTS -->
+  <section class="test-results">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Hasil Uji Lapangan</h2>
+        <p class="section-subtitle">Bukti nyata efektivitas Pupuk Cair Laut MIVO</p>
+      </div>
+
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-value">+42%</div>
+          <div class="result-label">Peningkatan Hasil Panen Padi</div>
+          <div class="result-desc">Dibandingkan kontrol tanpa pupuk MIVO</div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-value">+35%</div>
+          <div class="result-label">Pertumbuhan Tanaman Cabe</div>
+          <div class="result-desc">Tinggi tanaman dan jumlah cabang</div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-value">-60%</div>
+          <div class="result-label">Pengurangan Pupuk Kimia</div>
+          <div class="result-desc">Dapat mengurangi ketergantungan pupuk sintetik</div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-value">+28%</div>
+          <div class="result-label">Kandungan Bahan Organik Tanah</div>
+          <div class="result-desc">Setelah 3 bulan aplikasi rutin</div>
+        </div>
+      </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+  <script>
+    // Product Gallery
+    document.addEventListener('DOMContentLoaded', function() {
+      const mainImage = document.getElementById('mainImage');
+      const thumbnails = document.querySelectorAll('.thumbnail');
+
+      thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', function() {
+          thumbnails.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          mainImage.src = this.dataset.image;
+          mainImage.alt = this.alt;
+        });
+      });
+
+      // Application tabs
+      const appTabBtns = document.querySelectorAll('.app-tab-btn');
+      const appTabPanes = document.querySelectorAll('.app-tab-pane');
+
+      appTabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const appId = this.dataset.app;
+
+          appTabBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          appTabPanes.forEach(pane => {
+            pane.classList.remove('active');
+            if (pane.id === appId) {
+              pane.classList.add('active');
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

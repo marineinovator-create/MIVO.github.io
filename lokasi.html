@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peta Lokasi | MIVO - Marine Inovator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a class="brand" href="index.html">
+      <img src="logo mivo.png" alt="MiVO Logo" />
+    </a>
+
+    <nav class="nav">
+      <a href="index.html" class="nav-link">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang Kami</a>
+      <a href="produk.html" class="nav-link">Produk</a>
+      <a href="lokasi.html" class="nav-link">Peta Lokasi</a>
+      <a href="kontak.html" class="nav-link">Kontak</a>
+      <!-- Profile link akan ditambahkan otomatis oleh auth-header.js -->
+      <a href="admin.html" class="nav-link">Dashboard</a>
+    </nav>
+
+    <!-- Auth actions akan diupdate otomatis oleh auth-header.js -->
+    <div class="auth-actions" id="authActions">
+      <!-- Default state sebelum JS load -->
+      <a href="signup.html" class="btn btn-outline">Daftar</a>
+      <a href="login.html" class="btn btn-primary">Login</a>
+    </div>
+  </div>
+</header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="container">
+      <div class="hero-content fade-in">
+        <h1 class="hero-title">Peta Lokasi Operasional</h1>
+        <p class="hero-subtitle">
+          Jelajahi jaringan operasional MIVO di seluruh Indonesia - dari pusat riset 
+          hingga unit produksi komunitas yang memberdayakan masyarakat pesisir.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP CONTROLS -->
+  <section class="map-controls-section">
+    <div class="container">
+      <div class="controls-grid">
+        <div class="stats-panel">
+          <h3>Statistik Operasional</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="total-units">0</div>
+              <div class="stat-label">Total Unit</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="active-units">0</div>
+              <div class="stat-label">Aktif</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="maintenance-units">0</div>
+              <div class="stat-label">Perawatan</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="inactive-units">0</div>
+              <div class="stat-label">Nonaktif</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="filters-panel">
+          <h3>Filter Lokasi</h3>
+          <div class="filter-options">
+            <div class="filter-group">
+              <label>Status:</label>
+              <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="active">Aktif</button>
+                <button class="filter-btn" data-filter="maintenance">Perawatan</button>
+                <button class="filter-btn" data-filter="inactive">Nonaktif</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label>Tipe:</label>
+              <div class="filter-buttons">
+                <button class="filter-btn active" data-type="all">Semua</button>
+                <button class="filter-btn" data-type="research">Riset</button>
+                <button class="filter-btn" data-type="production">Produksi</button>
+                <button class="filter-btn" data-type="training">Training</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="search-panel">
+          <h3>Cari Lokasi</h3>
+          <div class="search-box">
+            <input type="text" id="locationSearch" placeholder="Cari nama lokasi atau daerah..." />
+            <button class="search-btn" id="searchButton">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="search-results" id="searchResults"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN MAP -->
+  <section class="map-section">
+    <div class="container">
+      <div class="map-container">
+        <div id="map" class="main-map"></div>
+
+       
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATIONS GRID -->
+  <section class="locations-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Daftar Lokasi Operasional</h2>
+        <p class="section-subtitle">Unit-unit MIVO yang tersebar di berbagai wilayah Indonesia</p>
+      </div>
+
+      <div class="locations-grid" id="locationsGrid">
+        <!-- Locations will be populated by JavaScript -->
+      </div>
+
+      <div class="pagination" id="pagination">
+        <!-- Pagination will be populated by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT PLANNING -->
+  <section class="visit-planning">
+    <div class="container">
+      <div class="planning-card">
+        <div class="planning-content">
+          <h2>Rencanakan Kunjungan Anda</h2>
+          <p>
+            Ingin mengunjungi salah satu lokasi operasional MIVO? Kami dengan senang hati 
+            akan mengatur kunjungan dan demonstrasi teknologi untuk Anda.
+          </p>
+          <div class="planning-features">
+            <div class="feature">
+              <div class="feature-icon">📅</div>
+              <span>Jadwal fleksibel</span>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">👨‍🔬</div>
+              <span>Pemandu ahli</span>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🔬</div>
+              <span>Demo langsung</span>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">💬</div>
+              <span>Konsultasi gratis</span>
+            </div>
+          </div>
+        </div>
+        <div class="planning-form">
+          <h3>Ajukan Kunjungan</h3>
+          <form id="visitForm">
+            <div class="form-group">
+              <label for="visitName" class="form-label">Nama Lengkap</label>
+              <input type="text" id="visitName" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="visitEmail" class="form-label">Email</label>
+              <input type="email" id="visitEmail" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="visitLocation" class="form-label">Lokasi yang Ingin Dikunjungi</label>
+              <select id="visitLocation" class="form-select" required>
+                <option value="">Pilih lokasi...</option>
+                <!-- Options will be populated by JavaScript -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="visitDate" class="form-label">Tanggal yang Diinginkan</label>
+              <input type="date" id="visitDate" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="visitPurpose" class="form-label">Tujuan Kunjungan</label>
+              <select id="visitPurpose" class="form-select" required>
+                <option value="">Pilih tujuan...</option>
+                <option value="research">Penelitian & Studi</option>
+                <option value="collaboration">Kolaborasi Bisnis</option>
+                <option value="training">Pelatihan & Workshop</option>
+                <option value="media">Liputan Media</option>
+                <option value="other">Lainnya</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajukan Kunjungan</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <h2>Tertarik Menjadi Mitra MIVO?</h2>
+          <p>Bergabunglah dengan jaringan kami dan wujudkan energi biru berkelanjutan di wilayah Anda</p>
+        </div>
+        <div class="cta-actions">
+          <a href="kontak.html" class="btn btn-white">Hubungi Kami</a>
+          <a href="produk.html" class="btn btn-outline">Lihat Produk</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <p>Marine Inovator - Energi Biru untuk Indonesia</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-section">
+            <h4>Navigasi</h4>
+            <a href="index.html">Beranda</a>
+            <a href="tentang.html">Tentang Kami</a>
+            <a href="produk.html">Produk</a>
+          </div>
+          <div class="footer-section">
+            <h4>Dukungan</h4>
+            <a href="lokasi.html">Peta Lokasi</a>
+            <a href="kontak.html">Kontak</a>
+            <a href="admin.html">Dashboard</a>
+          </div>
+          <div class="footer-section">
+            <h4>Legal</h4>
+            <a href="#">Kebijakan Privasi</a>
+            <a href="#">Syarat & Ketentuan</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 MIVO (Marine Inovator) | Energi Biru untuk Indonesia</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL FOR LOCATION DETAILS -->
+  <div id="locationModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalLocationTitle">Detail Lokasi</h3>
+        <button class="modal-close" onclick="closeLocationModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalLocationContent">
+          <!-- Content will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="auth.js"></script>
+<script src="js/auth-header.js"></script>
+
+
+  <script>
+    // map.js - Map functionality untuk MIVO
+    class MIVOMap {
+      constructor() {
+        this.map = null;
+        this.markers = {};
+        this.markerCluster = null;
+        this.currentLocations = [];
+        this.init();
+      }
+
+      init() {
+        this.initializeMap();
+        this.setupMapControls();
+      }
+
+      initializeMap() {
+        // Initialize the map
+        this.map = L.map('map').setView([-6.124, 106.136], 11);
+
+        // Add base layers
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        });
+
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri'
+        });
+
+        // Add default layer
+        osmLayer.addTo(this.map);
+
+        // Add layer control
+        L.control.layers({
+          "OpenStreetMap": osmLayer,
+          "Satellite": satelliteLayer
+        }).addTo(this.map);
+
+        // Initialize marker cluster
+        this.markerCluster = L.markerClusterGroup({
+          chunkedLoading: true,
+          maxClusterRadius: 50,
+          spiderfyOnMaxZoom: true,
+          showCoverageOnHover: true,
+          zoomToBoundsOnClick: true
+        });
+
+        this.map.addLayer(this.markerCluster);
+      }
+
+      initialize(locations) {
+        this.currentLocations = locations;
+        this.addLocationsToMap(locations);
+        this.addLegend();
+      }
+
+      addLocationsToMap(locations) {
+        // Clear existing markers
+        this.markerCluster.clearLayers();
+        this.markers = {};
+
+        locations.forEach(location => {
+          const marker = this.createMarker(location);
+          this.markers[location.id] = marker;
+          this.markerCluster.addLayer(marker);
+        });
+      }
+
+      createMarker(location) {
+        // Create custom icon based on location type and status
+        const icon = this.createCustomIcon(location);
+        
+        const marker = L.marker(location.coordinates, { icon });
+        
+        // Create popup content
+        const popupContent = this.createPopupContent(location);
+        marker.bindPopup(popupContent);
+        
+        // Add click event
+        marker.on('click', () => {
+          this.onMarkerClick(location);
+        });
+
+        return marker;
+      }
+
+      createCustomIcon(location) {
+        const typeColors = {
+          'research': '#e11d48',
+          'production': '#2563eb',
+          'training': '#059669',
+          'community': '#7c3aed'
+        };
+
+        const statusIcons = {
+          'active': '✅',
+          'maintenance': '🛠️',
+          'inactive': '⏸️'
+        };
+
+        const color = typeColors[location.type] || '#6b7280';
+        const statusIcon = statusIcons[location.status] || '❓';
+
+        return L.divIcon({
+          html: `
+            <div style="
+              background: ${color};
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              border: 3px solid white;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-weight: bold;
+              font-size: 16px;
+            ">
+              ${statusIcon}
+            </div>
+          `,
+          className: 'custom-marker',
+          iconSize: [40, 40],
+          iconAnchor: [20, 20]
+        });
+      }
+
+      createPopupContent(location) {
+        return `
+          <div style="min-width: 250px">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <h3 style="margin: 0; color: #005f8f;">${location.name}</h3>
+              <span style="
+                padding: 4px 8px;
+                border-radius: 6px;
+                background: ${location.status === 'active' ? '#2e7d32' : location.status === 'maintenance' ? '#f9a825' : '#e53935'};
+                color: white;
+                font-size: 12px;
+                font-weight: 600;
+              ">
+                ${this.getStatusLabel(location.status)}
+              </span>
+            </div>
+            
+            <div style="margin-bottom: 8px;">
+              <strong>Alamat:</strong><br>
+              ${location.address}
+            </div>
+            
+            <div style="margin-bottom: 8px;">
+              <strong>Deskripsi:</strong><br>
+              ${location.description}
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+              <div>
+                <strong>Kapasitas:</strong><br>
+                ${location.capacity}
+              </div>
+              <div>
+                <strong>Produksi:</strong><br>
+                ${location.production}
+              </div>
+            </div>
+            
+            <div style="border-top: 1px solid #e5e7eb; padding-top: 8px;">
+              <button onclick="window.showLocationDetail('${location.id}')" 
+                      style="
+                        background: #005f8f;
+                        color: white;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        width: 100%;
+                        font-weight: 600;
+                      ">
+                Lihat Detail
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      getStatusLabel(status) {
+        const statuses = {
+          'active': 'Aktif',
+          'maintenance': 'Perawatan',
+          'inactive': 'Nonaktif'
+        };
+        return statuses[status] || status;
+      }
+
+      onMarkerClick(location) {
+        // You can add additional marker click handling here
+        console.log('Marker clicked:', location.name);
+      }
+
+      setupMapControls() {
+        // Locate me button
+        document.getElementById('locateMe')?.addEventListener('click', () => {
+          this.locateUser();
+        });
+
+        // Reset view button
+        document.getElementById('resetView')?.addEventListener('click', () => {
+          this.resetView();
+        });
+      }
+
+      locateUser() {
+        if (!navigator.geolocation) {
+          alert('Geolocation tidak didukung oleh browser Anda');
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            this.map.setView([latitude, longitude], 13);
+            
+            // Add temporary marker for user location
+            L.marker([latitude, longitude])
+              .addTo(this.map)
+              .bindPopup('Lokasi Anda')
+              .openPopup();
+          },
+          (error) => {
+            alert('Tidak dapat mengakses lokasi Anda: ' + error.message);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+          }
+        );
+      }
+
+      resetView() {
+        this.map.setView([-6.124, 106.136], 11);
+      }
+
+      filterMarkers(filteredLocations) {
+        this.markerCluster.clearLayers();
+        
+        filteredLocations.forEach(location => {
+          const marker = this.markers[location.id];
+          if (marker) {
+            this.markerCluster.addLayer(marker);
+          }
+        });
+      }
+
+      focusOnLocation(locationId) {
+        const location = this.currentLocations.find(loc => loc.id === locationId);
+        if (!location || !this.markers[locationId]) return;
+
+        const marker = this.markers[locationId];
+        this.map.setView(marker.getLatLng(), 14, {
+          animate: true,
+          duration: 1
+        });
+        marker.openPopup();
+      }
+
+      addLegend() {
+        const legend = L.control({ position: 'bottomright' });
+
+        legend.onAdd = () => {
+          const div = L.DomUtil.create('div', 'info legend');
+          div.style.backgroundColor = 'white';
+          div.style.padding = '10px';
+          div.style.borderRadius = '5px';
+          div.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
+          
+          div.innerHTML = `
+            <h4 style="margin: 0 0 10px 0; color: #005f8f;">Legenda</h4>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #e11d48; border-radius: 50%;"></div>
+                <span>Pusat Riset</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #2563eb; border-radius: 50%;"></div>
+                <span>Unit Produksi</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #059669; border-radius: 50%;"></div>
+                <span>Pusat Training</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #7c3aed; border-radius: 50%;"></div>
+                <span>Komunitas</span>
+              </div>
+            </div>
+          `;
+          return div;
+        };
+
+        legend.addTo(this.map);
+      }
+
+      // Method to add a new location dynamically
+      addNewLocation(locationData) {
+        const newLocation = {
+          id: 'new-' + Date.now(),
+          ...locationData
+        };
+        
+        this.currentLocations.push(newLocation);
+        const marker = this.createMarker(newLocation);
+        this.markers[newLocation.id] = marker;
+        this.markerCluster.addLayer(marker);
+        
+        return newLocation.id;
+      }
+
+      // Method to remove a location
+      removeLocation(locationId) {
+        const marker = this.markers[locationId];
+        if (marker) {
+          this.markerCluster.removeLayer(marker);
+          delete this.markers[locationId];
+        }
+        
+        this.currentLocations = this.currentLocations.filter(loc => loc.id !== locationId);
+      }
+
+      // Method to update a location
+      updateLocation(locationId, updates) {
+        const locationIndex = this.currentLocations.findIndex(loc => loc.id === locationId);
+        if (locationIndex === -1) return false;
+
+        // Update location data
+        this.currentLocations[locationIndex] = {
+          ...this.currentLocations[locationIndex],
+          ...updates
+        };
+
+        // Update marker
+        const marker = this.markers[locationId];
+        if (marker) {
+          this.markerCluster.removeLayer(marker);
+          const newMarker = this.createMarker(this.currentLocations[locationIndex]);
+          this.markers[locationId] = newMarker;
+          this.markerCluster.addLayer(newMarker);
+        }
+
+        return true;
+      }
+
+      // Method to get bounds of all markers
+      getMapBounds() {
+        return this.markerCluster.getBounds();
+      }
+
+      // Method to fit map to show all markers
+      fitToMarkers() {
+        const bounds = this.getMapBounds();
+        if (bounds.isValid()) {
+          this.map.fitBounds(bounds, { padding: [20, 20] });
+        }
+      }
+    }
+
+    // Initialize map when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      window.mivoMap = new MIVOMap();
+    });
+
+    // Location data
+    const locations = [
+      {
+        id: 'upi-serang',
+        name: 'Pusat Riset Energi Laut - UPI Serang',
+        type: 'research',
+        status: 'active',
+        coordinates: [-6.113063, 106.136709],
+        address: 'UPI Kampus Serang, Jl. Ciwaru Raya, Serang, Banten',
+        description: 'Laboratorium riset dan pengembangan teknologi energi laut terpadu',
+        capacity: '100 kW',
+        production: '85 kW',
+        efficiency: '85%',
+        established: '2023',
+        contact: '+62 812-9124-0427',
+        facilities: ['Laboratorium', 'Workshop', 'Training Center', 'Demonstration Unit'],
+        operatingHours: 'Senin - Jumat, 08:00 - 17:00',
+        images: ['images/location-upi-1.jpg', 'images/location-upi-2.jpg']
+      },
+      {
+        id: 'desa-lontar',
+        name: 'Unit Produksi Desa Lontar',
+        type: 'production',
+        status: 'active',
+        coordinates: [-6.0446, 106.3601],
+        address: 'Desa Lontar, Kec. Tirtayasa, Serang, Banten',
+        description: 'Unit produksi biogas skala komunitas dengan melibatkan kelompok nelayan',
+        capacity: '50 kW',
+        production: '45 kW',
+        efficiency: '90%',
+        established: '2024',
+        contact: '+62 813-4567-8901',
+        facilities: ['Reaktor Biogas', 'Pupuk Cair', 'Training Area'],
+        operatingHours: 'Setiap hari, 06:00 - 18:00',
+        images: ['images/location-lontar-1.jpg', 'images/location-lontar-2.jpg']
+      },
+      {
+        id: 'mirak',
+        name: 'Unit Mirak - Pengolahan Limbah Ikan',
+        type: 'production',
+        status: 'maintenance',
+        coordinates: [-6.1245, 106.1567],
+        address: 'Kelurahan Mirak, Kec. Taktakan, Serang, Banten',
+        description: 'Unit pengolahan limbah ikan terpadu dengan teknologi biogas',
+        capacity: '80 kW',
+        production: '0 kW',
+        efficiency: '0%',
+        established: '2024',
+        contact: '+62 812-3456-7890',
+        facilities: ['Reaktor Biogas', 'Pemisahan Padat-Cair', 'Storage'],
+        operatingHours: 'Dalam perawatan',
+        images: ['images/location-mirak-1.jpg']
+      },
+      {
+        id: 'bogeneria',
+        name: 'Unit Bogeneria - BioOil Production',
+        type: 'production',
+        status: 'active',
+        coordinates: [-6.1342, 106.1423],
+        address: 'Kawasan Bogeneria, Serang, Banten',
+        description: 'Unit produksi bio-oil dari biomassa laut dengan teknologi pirolisis',
+        capacity: '120 kW',
+        production: '110 kW',
+        efficiency: '92%',
+        established: '2024',
+        contact: '+62 817-8901-2345',
+        facilities: ['BioOil Converter', 'Storage Tank', 'Quality Control'],
+        operatingHours: 'Senin - Sabtu, 07:00 - 16:00',
+        images: ['images/location-bogeneria-1.jpg']
+      },
+      {
+        id: 'citegor',
+        name: 'Unit Citegor - Pupuk Organik',
+        type: 'production',
+        status: 'inactive',
+        coordinates: [-6.1189, 106.1284],
+        address: 'Kelurahan Citegor, Kec. Walantaka, Serang, Banten',
+        description: 'Unit produksi pupuk cair organik dari digestate biogas',
+        capacity: '60 kW',
+        production: '0 kW',
+        efficiency: '0%',
+        established: '2024',
+        contact: '+62 818-9012-3456',
+        facilities: ['Fermentor', 'Mixing Tank', 'Packaging'],
+        operatingHours: 'Sementara nonaktif',
+        images: ['images/location-citegor-1.jpg']
+      },
+      {
+        id: 'training-center',
+        name: 'Pusat Pelatihan MIVO',
+        type: 'training',
+        status: 'active',
+        coordinates: [-6.1089, 106.1402],
+        address: 'Jl. Pendidikan No. 45, Serang, Banten',
+        description: 'Pusat pelatihan dan capacity building untuk teknologi energi terbarukan',
+        capacity: 'N/A',
+        production: 'N/A',
+        efficiency: 'N/A',
+        established: '2023',
+        contact: '+62 812-9124-0427',
+        facilities: ['Classroom', 'Demo Area', 'Laboratorium', 'Library'],
+        operatingHours: 'Senin - Jumat, 08:00 - 17:00',
+        images: ['images/training-center-1.jpg']
+      }
+    ];
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeMap();
+      initializeLocationsGrid();
+      initializeFilters();
+      initializeVisitForm();
+      
+      // Update statistics
+      updateStatistics();
+    });
+
+    function initializeMap() {
+      // This function is implemented in map.js
+      if (window.mivoMap) {
+        window.mivoMap.initialize(locations);
+      }
+    }
+
+    function initializeLocationsGrid() {
+      const grid = document.getElementById('locationsGrid');
+      if (!grid) return;
+
+      // Clear existing content
+      grid.innerHTML = '';
+
+      // Populate locations
+      locations.forEach(location => {
+        const locationCard = createLocationCard(location);
+        grid.appendChild(locationCard);
+      });
+
+      // Initialize pagination
+      initializePagination();
+    }
+
+    function createLocationCard(location) {
+      const card = document.createElement('div');
+      card.className = `location-card ${location.status}`;
+      card.innerHTML = `
+        <div class="location-header">
+          <div class="location-type ${location.type}">${getTypeLabel(location.type)}</div>
+          <div class="location-status ${location.status}">${getStatusLabel(location.status)}</div>
+        </div>
+        <div class="location-content">
+          <h4>${location.name}</h4>
+          <p class="location-address">${location.address}</p>
+          <p class="location-description">${location.description}</p>
+          
+          <div class="location-stats">
+            <div class="stat">
+              <span class="stat-label">Kapasitas</span>
+              <span class="stat-value">${location.capacity}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Produksi</span>
+              <span class="stat-value">${location.production}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Efisiensi</span>
+              <span class="stat-value">${location.efficiency}</span>
+            </div>
+          </div>
+        </div>
+        <div class="location-actions">
+          <button class="btn btn-outline btn-sm" onclick="showLocationDetail('${location.id}')">
+            Detail
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="focusOnMap('${location.id}')">
+            Lihat di Peta
+          </button>
+        </div>
+      `;
+      return card;
+    }
+
+    function getTypeLabel(type) {
+      const types = {
+        'research': 'Pusat Riset',
+        'production': 'Unit Produksi',
+        'training': 'Pusat Training',
+        'community': 'Komunitas'
+      };
+      return types[type] || type;
+    }
+
+    function getStatusLabel(status) {
+      const statuses = {
+        'active': 'Aktif',
+        'maintenance': 'Perawatan',
+        'inactive': 'Nonaktif'
+      };
+      return statuses[status] || status;
+    }
+
+    function initializeFilters() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all buttons in group
+          const group = this.parentElement;
+          group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          // Apply filters
+          applyFilters();
+        });
+      });
+
+      // Search functionality
+      const searchInput = document.getElementById('locationSearch');
+      const searchButton = document.getElementById('searchButton');
+      
+      if (searchInput && searchButton) {
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') performSearch();
+        });
+      }
+    }
+
+    function applyFilters() {
+      const statusFilter = document.querySelector('.filter-buttons [data-filter].active').dataset.filter;
+      const typeFilter = document.querySelector('.filter-buttons [data-type].active').dataset.type;
+      
+      const filteredLocations = locations.filter(location => {
+        const statusMatch = statusFilter === 'all' || location.status === statusFilter;
+        const typeMatch = typeFilter === 'all' || location.type === typeFilter;
+        return statusMatch && typeMatch;
+      });
+
+      updateLocationsGrid(filteredLocations);
+      updateStatistics(filteredLocations);
+      
+      // Update map markers
+      if (window.mivoMap) {
+        window.mivoMap.filterMarkers(filteredLocations);
+      }
+    }
+
+    function performSearch() {
+      const searchTerm = document.getElementById('locationSearch').value.toLowerCase().trim();
+      const resultsContainer = document.getElementById('searchResults');
+      
+      if (!searchTerm) {
+        resultsContainer.innerHTML = '';
+        resultsContainer.style.display = 'none';
+        applyFilters(); // Reset to current filters
+        return;
+      }
+
+      const searchResults = locations.filter(location => 
+        location.name.toLowerCase().includes(searchTerm) ||
+        location.address.toLowerCase().includes(searchTerm) ||
+        location.description.toLowerCase().includes(searchTerm)
+      );
+
+      // Display search results
+      if (searchResults.length > 0) {
+        resultsContainer.innerHTML = '';
+        searchResults.forEach(location => {
+          const resultItem = document.createElement('div');
+          resultItem.className = 'search-result-item';
+          resultItem.innerHTML = `
+            <strong>${location.name}</strong>
+            <br>
+            <small>${location.address}</small>
+          `;
+          resultItem.addEventListener('click', () => {
+            focusOnMap(location.id);
+            resultsContainer.style.display = 'none';
+          });
+          resultsContainer.appendChild(resultItem);
+        });
+        resultsContainer.style.display = 'block';
+        
+        // Update grid with search results
+        updateLocationsGrid(searchResults);
+      } else {
+        resultsContainer.innerHTML = '<div class="no-results">Tidak ada hasil ditemukan</div>';
+        resultsContainer.style.display = 'block';
+        updateLocationsGrid([]);
+      }
+    }
+
+    function updateLocationsGrid(filteredLocations) {
+      const grid = document.getElementById('locationsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+
+      if (filteredLocations.length === 0) {
+        grid.innerHTML = '<div class="no-locations">Tidak ada lokasi yang sesuai dengan filter</div>';
+        return;
+      }
+
+      filteredLocations.forEach(location => {
+        const locationCard = createLocationCard(location);
+        grid.appendChild(locationCard);
+      });
+
+      initializePagination();
+    }
+
+    function initializePagination() {
+      // Simple pagination implementation
+      // In a real application, this would handle larger datasets
+    }
+
+    function updateStatistics(filteredLocations = locations) {
+      const total = filteredLocations.length;
+      const active = filteredLocations.filter(l => l.status === 'active').length;
+      const maintenance = filteredLocations.filter(l => l.status === 'maintenance').length;
+      const inactive = filteredLocations.filter(l => l.status === 'inactive').length;
+
+      document.getElementById('total-units').textContent = total;
+      document.getElementById('active-units').textContent = active;
+      document.getElementById('maintenance-units').textContent = maintenance;
+      document.getElementById('inactive-units').textContent = inactive;
+    }
+
+    function initializeVisitForm() {
+      const visitForm = document.getElementById('visitForm');
+      const locationSelect = document.getElementById('visitLocation');
+
+      // Populate location options
+      locations.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location.id;
+        option.textContent = location.name;
+        locationSelect.appendChild(option);
+      });
+
+      if (visitForm) {
+        visitForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form data
+          const formData = {
+            name: document.getElementById('visitName').value,
+            email: document.getElementById('visitEmail').value,
+            location: document.getElementById('visitLocation').value,
+            date: document.getElementById('visitDate').value,
+            purpose: document.getElementById('visitPurpose').value
+          };
+
+          // In real application, send to server
+          alert('Terima kasih! Permintaan kunjungan Anda telah dikirim. Tim kami akan menghubungi Anda untuk konfirmasi.');
+          visitForm.reset();
+        });
+      }
+    }
+
+    function showLocationDetail(locationId) {
+      const location = locations.find(l => l.id === locationId);
+      if (!location) return;
+
+      const modal = document.getElementById('locationModal');
+      const title = document.getElementById('modalLocationTitle');
+      const content = document.getElementById('modalLocationContent');
+
+      title.textContent = location.name;
+      
+      content.innerHTML = `
+        <div class="location-detail">
+          <div class="detail-header">
+            <div class="detail-type ${location.type}">${getTypeLabel(location.type)}</div>
+            <div class="detail-status ${location.status}">${getStatusLabel(location.status)}</div>
+          </div>
+          
+          <div class="detail-content">
+            <div class="detail-section">
+              <h4>Alamat</h4>
+              <p>${location.address}</p>
+            </div>
+
+            <div class="detail-section">
+              <h4>Deskripsi</h4>
+              <p>${location.description}</p>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="detail-label">Kapasitas</span>
+                <span class="detail-value">${location.capacity}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Produksi</span>
+                <span class="detail-value">${location.production}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Efisiensi</span>
+                <span class="detail-value">${location.efficiency}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Didirikan</span>
+                <span class="detail-value">${location.established}</span>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <h4>Fasilitas</h4>
+              <div class="facilities-list">
+                ${location.facilities.map(facility => `<span class="facility-tag">${facility}</span>`).join('')}
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <h4>Jam Operasional</h4>
+              <p>${location.operatingHours}</p>
+            </div>
+
+            <div class="detail-section">
+              <h4>Kontak</h4>
+              <p>${location.contact}</p>
+            </div>
+          </div>
+
+          <div class="detail-actions">
+            <button class="btn btn-primary" onclick="focusOnMap('${location.id}'); closeLocationModal();">
+              Lihat di Peta
+            </button>
+            <button class="btn btn-outline" onclick="closeLocationModal()">
+              Tutup
+            </button>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeLocationModal() {
+      document.getElementById('locationModal').classList.add('hidden');
+    }
+
+    function focusOnMap(locationId) {
+      if (window.mivoMap) {
+        window.mivoMap.focusOnLocation(locationId);
+      }
+    }
+
+    // Global functions for buttons
+    window.showLocationDetail = showLocationDetail;
+    window.closeLocationModal = closeLocationModal;
+    window.focusOnMap = focusOnMap;
+  </script>
+
+  <style>
+
+/* PERBAIKAN MAP CONTAINER - PASTIKAN Z-INDEX LEBIH RENDAH */
+.map-container {
+  position: relative;
+  z-index: 1; /* Lebih rendah dari header */
+}
+
+/* Pastikan popup map tidak menutupi header */
+.leaflet-popup {
+  z-index: 500 !important; /* Lebih rendah dari header */
+}
+
+.leaflet-marker-icon {
+  z-index: 400 !important;
+}
+
+.leaflet-marker-pane {
+  z-index: 400 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 500 !important;
+}
+
+.leaflet-overlay-pane {
+  z-index: 300 !important;
+}
+
+.leaflet-shadow-pane {
+  z-index: 200 !important;
+}
+
+.leaflet-tile-pane {
+  z-index: 100 !important;
+}
+
+/* PERBAIKAN MAP TOOLS - POSISIKAN DI BAWAH HEADER */
+.map-tools {
+  position: absolute;
+  top: 90px; /* Di bawah header */
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  z-index: 600; /* Lebih tinggi dari map, lebih rendah dari header */
+}
+
+/* PERBAIKAN SEARCH RESULTS */
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 999; /* Lebih rendah dari header */
+  display: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* PERBAIKAN MODAL - PASTIKAN DI ATAS SEMUA ELEMEN */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* Lebih tinggi dari header */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    padding-top: 70px; /* Sesuaikan untuk mobile */
+  }
+  
+  .map-tools {
+    top: 80px; /* Sesuaikan untuk mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 60px; /* Sesuaikan untuk mobile kecil */
+  }
+  
+  .map-tools {
+    top: 70px; /* Sesuaikan untuk mobile kecil */
+  }
+}
+    /* Additional Styles for Locations Page */
+    .map-controls-section {
+      padding: var(--space-xl) 0;
+      background: var(--pure-white);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-xl);
+    }
+
+    .stats-panel, .filters-panel, .search-panel {
+      background: var(--neutral-light);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+    }
+
+    .stats-panel h3, .filters-panel h3, .search-panel h3 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-lg);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: var(--space-md);
+      background: var(--pure-white);
+      border-radius: var(--radius-md);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-accent);
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--neutral-gray);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .filter-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .filter-group label {
+      display: block;
+      margin-bottom: var(--space-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--neutral-dark);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--pure-white);
+      border: 1px solid #d1d5db;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: var(--transition-fast);
+    }
+
+    .filter-btn.active {
+      background: var(--primary-blue);
+      color: white;
+      border-color: var(--primary-blue);
+    }
+    
+
+    .search-box {
+      position: relative;
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: var(--space-md);
+      border: 1px solid #d1d5db;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+    }
+
+    .search-btn {
+      padding: var(--space-md);
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      display: none;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .search-result-item {
+      padding: var(--space-md);
+      cursor: pointer;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .search-result-item:hover {
+      background: var(--neutral-light);
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .no-results {
+      padding: var(--space-md);
+      text-align: center;
+      color: var(--neutral-gray);
+    }
+
+    .map-section {
+      padding: var(--space-xl) 0;
+      background: var(--neutral-light);
+    }
+
+    .map-container {
+      position: relative;
+      height: 600px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .main-map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-tools {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      z-index: 1000;
+    }
+
+    .tool-btn {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: none;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+
+    .tool-btn:hover {
+      background: var(--neutral-light);
+    }
+
+    .locations-section {
+      padding: var(--space-2xl) 0;
+      background: var(--pure-white);
+    }
+
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .location-card {
+      background: var(--pure-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: var(--transition-normal);
+      border-left: 4px solid;
+    }
+
+    .location-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .location-card.research { border-left-color: #e11d48; }
+    .location-card.production { border-left-color: #2563eb; }
+    .location-card.training { border-left-color: #059669; }
+    .location-card.community { border-left-color: #7c3aed; }
+
+    .location-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-lg);
+      background: var(--neutral-light);
+    }
+
+    .location-type {
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: var(--font-weight-semibold);
+      color: white;
+    }
+
+    .location-type.research { background: #e11d48; }
+    .location-type.production { background: #2563eb; }
+    .location-type.training { background: #059669; }
+    .location-type.community { background: #7c3aed; }
+
+    .location-status {
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: var(--font-weight-semibold);
+      color: white;
+    }
+
+    .location-status.active { background: var(--success-green); }
+    .location-status.maintenance { background: var(--warning-orange); }
+    .location-status.inactive { background: var(--danger-red); }
+
+    .location-content {
+      padding: var(--space-lg);
+    }
+
+    .location-content h4 {
+      color: var(--neutral-dark);
+      margin-bottom: var(--space-sm);
+    }
+
+    .location-address {
+      color: var(--neutral-gray);
+      font-size: 0.875rem;
+      margin-bottom: var(--space-md);
+    }
+
+    .location-description {
+      color: var(--neutral-gray);
+      line-height: 1.5;
+      margin-bottom: var(--space-lg);
+    }
+
+    .location-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--neutral-gray);
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-value {
+      display: block;
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-blue);
+    }
+
+    .location-actions {
+      padding: var(--space-lg);
+      background: var(--neutral-light);
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .no-locations {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-2xl);
+      color: var(--neutral-gray);
+    }
+
+    .visit-planning {
+      padding: var(--space-2xl) 0;
+      background: var(--neutral-light);
+    }
+
+    .planning-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+      background: var(--pure-white);
+      padding: var(--space-2xl);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .planning-content h2 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-lg);
+    }
+
+    .planning-features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+    }
+
+    .planning-form h3 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-xl);
+    }
+
+    .location-detail .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xl);
+    }
+
+    .detail-type, .detail-status {
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: var(--font-weight-semibold);
+      color: white;
+    }
+
+    .detail-type.research { background: #e11d48; }
+    .detail-type.production { background: #2563eb; }
+    .detail-type.training { background: #059669; }
+
+    .detail-status.active { background: var(--success-green); }
+    .detail-status.maintenance { background: var(--warning-orange); }
+    .detail-status.inactive { background: var(--danger-red); }
+
+    .detail-section {
+      margin-bottom: var(--space-xl);
+    }
+
+    .detail-section h4 {
+      color: var(--primary-blue);
+      margin-bottom: var(--space-md);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-md);
+      background: var(--neutral-light);
+      border-radius: var(--radius-md);
+    }
+
+    .detail-label {
+      font-weight: var(--font-weight-semibold);
+      color: var(--neutral-dark);
+    }
+
+    .detail-value {
+      color: var(--primary-accent);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .facilities-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .facility-tag {
+      background: var(--neutral-light);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      color: var(--neutral-dark);
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: flex-end;
+      margin-top: var(--space-xl);
+      padding-top: var(--space-xl);
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-xl);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: var(--primary-blue);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--neutral-gray);
+    }
+
+    .modal-body {
+      padding: var(--space-xl);
+    }
+
+    @media (max-width: 1024px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .planning-card {
+        grid-template-columns: 1fr;
+      }
+
+      .locations-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .map-container {
+        height: 400px;
+      }
+
+      .locations-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .location-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .planning-features {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .location-header {
+        flex-direction: column;
+        gap: var(--space-sm);
+        align-items: flex-start;
+      }
+
+      .location-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</body>
+</html>

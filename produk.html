@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produk & Teknologi | MIVO - Marine Inovator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    /* VARIABEL CSS KONSISTEN */
+    :root {
+      --primary-blue: #0077b6;
+      --primary-accent: #00b4d8;
+      --primary-dark: #023e8a;
+      --neutral-gray: #6c757d;
+      --neutral-light: #f8f9fa;
+      --neutral-dark: #212529;
+      --pure-white: #ffffff;
+      
+      /* Spacing konsisten */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+    }
+
+    /* PERBAIKAN TOMBOL AUTH ACTIONS - SESUAI PERMINTAAN */
+    .auth-actions {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    .auth-actions .btn {
+      min-width: 80px;
+      text-align: center;
+      font-size: 0.875rem;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-md);
+      transition: var(--transition-fast);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      border: 2px solid;
+      white-space: nowrap;
+      font-weight: var(--font-weight-semibold);
+    }
+
+    /* TOMBOL DAFTAR: Background transparan, teks PUTIH, border biru muda */
+    .auth-actions .btn-outline {
+      background: transparent;
+      color: var(--pure-white); /* TEKS PUTIH */
+      border-color: var(--primary-accent); /* BORDER BIRU MUDA */
+    }
+
+    .auth-actions .btn-outline:hover {
+      background: rgba(0, 180, 216, 0.2); /* SEDIKIT BACKGROUND BIRU MUDA SAAT HOVER */
+      border-color: var(--primary-accent);
+      color: var(--pure-white); /* TEKS TETAP PUTIH */
+    }
+
+    /* TOMBOL LOGIN: Background putih, teks biru, border putih */
+    .auth-actions .btn-primary {
+      background: var(--pure-white);
+      color: var(--primary-blue);
+      border-color: var(--pure-white);
+    }
+
+    .auth-actions .btn-primary:hover {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.9);
+      color: var(--primary-dark);
+    }
+
+    /* TOMBOL PUTIH UNTUK OVERLAY */
+    .btn-white {
+      background: var(--pure-white);
+      color: var(--primary-blue);
+      border-color: var(--pure-white);
+    }
+
+    .btn-white:hover {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.9);
+      color: var(--primary-dark);
+    }
+    
+    /* CSS untuk animasi demo produk */
+    .demo-container {
+      background: var(--pure-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin: var(--space-xl) 0;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    
+    .demo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .demo-controls {
+      display: flex;
+      gap: var(--space-sm);
+    }
+    
+    .demo-animation {
+      position: relative;
+      height: 300px;
+      background: linear-gradient(to bottom, #e0f7fa, #b2ebf2);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .biogas-animation {
+      background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
+    }
+    
+    .biooil-animation {
+      background: linear-gradient(to bottom, #fff3e0, #ffe0b2);
+    }
+    
+    .pupuk-animation {
+      background: linear-gradient(to bottom, #f3e5f5, #e1bee7);
+    }
+    
+    .animation-element {
+      position: absolute;
+      transition: all 1s ease;
+    }
+    
+    .input-material {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .process-arrow {
+      width: 40px;
+      height: 10px;
+      background: var(--primary-blue);
+      position: absolute;
+      border-radius: 5px;
+    }
+    
+    .output-product {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: var(--shadow-lg);
+      background: var(--pure-white);
+    }
+    
+    .process-chamber {
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      box-shadow: var(--shadow-md);
+      border: 2px dashed var(--primary-blue);
+    }
+    
+    .demo-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    
+    .stat-card {
+      background: var(--neutral-light);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-blue);
+      margin-bottom: var(--space-xs);
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--neutral-gray);
+    }
+
+    /* Video Section Styles */
+    .video-section {
+      padding: var(--space-2xl) 0;
+      background: var(--pure-white);
+    }
+
+    .video-container {
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      background: var(--neutral-light);
+    }
+
+    .video-header {
+      padding: var(--space-lg) var(--space-xl);
+      background: var(--primary-blue);
+      color: white;
+      text-align: center;
+    }
+
+    .video-header h2 {
+      margin: 0 0 var(--space-xs) 0;
+      font-size: 1.5rem;
+    }
+
+    .video-header p {
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+    }
+
+    .video-wrapper iframe,
+    .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-accent));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: var(--space-xl);
+    }
+
+    .video-placeholder-icon {
+      font-size: 4rem;
+      margin-bottom: var(--space-lg);
+    }
+
+    .video-placeholder h3 {
+      margin: 0 0 var(--space-md) 0;
+      font-size: 1.5rem;
+    }
+
+    .video-placeholder p {
+      margin: 0;
+      opacity: 0.9;
+      max-width: 400px;
+    }
+
+    .video-info {
+      padding: var(--space-xl);
+      background: var(--pure-white);
+    }
+
+    .video-info h3 {
+      color: var(--neutral-dark);
+      margin-bottom: var(--space-md);
+    }
+
+    .video-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .video-feature {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      background: var(--neutral-light);
+      border-radius: var(--radius-md);
+      transition: var(--transition-fast);
+    }
+
+    .video-feature:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .video-feature-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .video-feature-text {
+      font-size: 0.875rem;
+      color: var(--neutral-dark);
+    }
+
+    @media (max-width: 768px) {
+      .video-header {
+        padding: var(--space-md) var(--space-lg);
+      }
+      
+      .video-info {
+        padding: var(--space-lg);
+      }
+      
+      .video-features {
+        grid-template-columns: 1fr;
+      }
+      
+      .video-placeholder-icon {
+        font-size: 3rem;
+      }
+    }
+    
+    /* CSS yang sudah ada - dengan beberapa penyesuaian */
+    .products-showcase {
+      padding: var(--space-2xl) 0;
+      background: var(--neutral-light);
+    }
+
+    .products-filter {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-2xl);
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: var(--space-sm) var(--space-lg);
+      border: 2px solid var(--primary-blue);
+      background: transparent;
+      color: var(--primary-blue);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition-normal);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--primary-blue);
+      color: white;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--space-xl);
+    }
+
+    .product-card {
+      background: var(--pure-white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition-normal);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .product-image {
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition-normal);
+    }
+
+    .product-card:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: var(--space-md);
+      left: var(--space-md);
+      background: var(--primary-accent);
+      color: var(--pure-white);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: var(--font-weight-semibold);
+      z-index: 2;
+    }
+
+    .product-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: var(--transition-normal);
+    }
+
+    .product-card:hover .product-overlay {
+      opacity: 1;
+    }
+
+    .product-content {
+      padding: var(--space-xl);
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-md);
+    }
+
+    .product-header h3 {
+      font-size: 1.25rem;
+      color: var(--neutral-dark);
+      margin: 0;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .stars {
+      color: #fbbf24;
+    }
+
+    .rating-text {
+      font-size: 0.875rem;
+      color: var(--neutral-gray);
+    }
+
+    .product-description {
+      color: var(--neutral-gray);
+      margin-bottom: var(--space-lg);
+      line-height: 1.6;
+    }
+
+    .product-features {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .feature-icon {
+      font-size: 1.125rem;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-price {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-xs);
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-blue);
+    }
+
+    .price-note {
+      font-size: 0.875rem;
+      color: var(--neutral-gray);
+    }
+
+    .product-actions {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .wishlist-btn {
+      padding: var(--space-sm);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: var(--transition-fast);
+    }
+
+    .wishlist-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .wishlist-icon {
+      font-size: 1.25rem;
+      transition: var(--transition-fast);
+    }
+
+    .wishlist-btn.active .wishlist-icon {
+      content: "❤️";
+    }
+
+    .comparison-section {
+      padding: var(--space-2xl) 0;
+      background: var(--pure-white);
+    }
+
+    .comparison-table {
+      background: var(--pure-white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* PERBAIKAN UNTUK PRODUCT CARD YANG KONSISTEN */
+    .product-card {
+        background: var(--pure-white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: var(--transition-normal);
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 580px;
+    }
+
+    .product-content {
+        padding: var(--space-xl);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .product-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0;
+    }
+
+    .product-header h3 {
+        font-size: 1.25rem;
+        color: var(--neutral-dark);
+        margin: 0;
+        flex: 1;
+        font-weight: var(--font-weight-semibold);
+        line-height: 1.3;
+    }
+
+    .product-rating {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        flex-shrink: 0;
+    }
+
+    .stars {
+        color: #fbbf24;
+        font-size: 0.875rem;
+    }
+
+    .rating-text {
+        font-size: 0.75rem;
+        color: var(--neutral-gray);
+        white-space: nowrap;
+    }
+
+    .product-description {
+        color: var(--neutral-gray);
+        line-height: 1.6;
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    .product-features {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+        margin: 0;
+    }
+
+    .feature {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        font-size: 0.875rem;
+    }
+
+    .feature-icon {
+        font-size: 1rem;
+        flex-shrink: 0;
+        width: 20px;
+        text-align: center;
+    }
+
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        gap: var(--space-md);
+        padding-top: var(--space-md);
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .product-price {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        flex-shrink: 0;
+    }
+
+    .price {
+        font-size: 1.125rem;
+        font-weight: var(--font-weight-bold);
+        color: var(--primary-blue);
+    }
+
+    .price-note {
+        font-size: 0.75rem;
+        color: var(--neutral-gray);
+    }
+
+    .product-actions {
+        display: flex;
+        gap: var(--space-sm);
+        flex-shrink: 0;
+    }
+
+    /* TOMBOL KONSISTEN DENGAN TENTANG KAMI */
+    .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.875rem;
+        font-weight: var(--font-weight-semibold);
+        border-radius: var(--radius-md);
+        transition: var(--transition-fast);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-xs);
+        border: 2px solid transparent;
+        white-space: nowrap;
+    }
+
+    .btn-primary {
+        background: var(--primary-blue);
+        color: white;
+        border-color: var(--primary-blue);
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--primary-blue);
+        border-color: var(--primary-blue);
+    }
+
+    .btn-outline:hover {
+        background: var(--primary-blue);
+        color: white;
+    }
+
+    .btn-ghost {
+        background: transparent;
+        color: var(--neutral-gray);
+        border: none;
+        padding: var(--space-sm);
+    }
+
+    .btn-ghost:hover {
+        background: #f8f9fa;
+        color: var(--primary-blue);
+    }
+
+    /* Pastikan tinggi gambar konsisten */
+    .product-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition-normal);
+    }
+
+    /* Badge yang konsisten */
+    .product-badge {
+        position: absolute;
+        top: var(--space-md);
+        left: var(--space-md);
+        background: var(--primary-accent);
+        color: var(--pure-white);
+        padding: 4px 8px;
+        border-radius: var(--radius-sm);
+        font-size: 0.7rem;
+        font-weight: var(--font-weight-bold);
+        z-index: 2;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Overlay yang konsisten */
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: var(--transition-normal);
+    }
+
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .comparison-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      background: var(--primary-blue);
+      color: white;
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .comparison-feature,
+    .comparison-product {
+      padding: var(--space-lg);
+      display: flex;
+      align-items: center;
+    }
+
+    .comparison-feature {
+      font-weight: var(--font-weight-semibold);
+      background: #f8fafc;
+    }
+
+    .comparison-product {
+      text-align: center;
+      justify-content: center;
+    }
+
+    .testimonials-section {
+      padding: var(--space-2xl) 0;
+      background: var(--neutral-light);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-xl);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--pure-white);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .testimonial-content {
+      margin-bottom: var(--space-lg);
+      position: relative;
+      padding-left: var(--space-lg);
+    }
+
+    .testimonial-content p {
+      font-style: italic;
+      color: var(--neutral-gray);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .testimonial-content::before {
+      content: "\201C";
+      font-size: 4rem;
+      color: var(--primary-accent);
+      opacity: 0.2;
+      position: absolute;
+      top: -1rem;
+      left: 0;
+      font-family: serif;
+      line-height: 1;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .author-info h4 {
+      margin: 0 0 var(--space-xs) 0;
+      color: var(--neutral-dark);
+    }
+
+    .author-info p {
+      margin: 0;
+      color: var(--neutral-gray);
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+      .product-card {
+          min-height: auto;
+      }
+      
+      .product-header {
+          flex-direction: column;
+          gap: var(--space-sm);
+          align-items: flex-start;
+      }
+      
+      .product-rating {
+          align-self: flex-start;
+      }
+      
+      .product-footer {
+          flex-direction: column;
+          gap: var(--space-md);
+          align-items: stretch;
+      }
+      
+      .product-actions {
+          justify-content: space-between;
+      }
+      
+      .product-image {
+          height: 180px;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison-header,
+      .comparison-row {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .comparison-feature {
+        background: var(--pure-white);
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-footer {
+        flex-direction: column;
+        gap: var(--space-md);
+        align-items: stretch;
+      }
+
+      .product-actions {
+        justify-content: space-between;
+      }
+
+      .testimonial-content::before {
+        font-size: 3rem;
+        top: -0.5rem;
+      }
+      
+      .demo-animation {
+        height: 200px;
+      }
+      
+      .demo-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-actions {
+        gap: var(--space-xs);
+      }
+
+      .auth-actions .btn {
+        min-width: 70px;
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-actions {
+        flex-direction: column;
+      }
+      
+      .product-actions .btn {
+        width: 100%;
+        text-align: center;
+      }
+      
+      .feature {
+        font-size: 0.8125rem;
+      }
+
+      .testimonial-content::before {
+        font-size: 2.5rem;
+      }
+
+      .auth-actions {
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+
+      .auth-actions .btn {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a class="brand" href="index.html">
+      <img src="logo mivo.png" alt="MiVO Logo" />
+    </a>
+
+    <nav class="nav">
+      <a href="index.html" class="nav-link">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang Kami</a>
+      <a href="produk.html" class="nav-link">Produk</a>
+      <a href="lokasi.html" class="nav-link">Peta Lokasi</a>
+      <a href="kontak.html" class="nav-link">Kontak</a>
+      <!-- Profile link akan ditambahkan otomatis oleh auth-header.js -->
+      <a href="admin.html" class="nav-link">Dashboard</a>
+    </nav>
+
+    <!-- Auth actions akan diupdate otomatis oleh auth-header.js -->
+    <div class="auth-actions" id="authActions">
+      <!-- Default state sebelum JS load -->
+      <a href="signup.html" class="btn btn-outline">Daftar</a>
+      <a href="login.html" class="btn btn-primary">Login</a>
+    </div>
+  </div>
+</header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="container">
+      <div class="hero-content fade-in">
+        <h1 class="hero-title">Teknologi & Inovasi Kami</h1>
+        <p class="hero-subtitle">
+          Solusi teknologi tepat guna untuk mengubah <strong>limbah perikanan</strong> menjadi 
+          energi bersih dan produk bernilai ekonomi tinggi.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS SHOWCASE -->
+  <section class="products-showcase">
+    <div class="container">
+      <!-- PERBAIKAN FILTER: Kategori disesuaikan dengan produk yang ada -->
+      <div class="products-filter">
+        <button class="filter-btn active" data-filter="all">Semua Produk</button>
+        <button class="filter-btn" data-filter="biogas">Biogas</button>
+        <button class="filter-btn" data-filter="biooil">BioOil</button>
+        <button class="filter-btn" data-filter="pupuk">Pupuk Cair</button>
+      </div>
+
+      <div class="products-grid" id="productsContainer">
+        <!-- Product 1: Biogas - KATEGORI DIPERBAIKI -->
+        <article class="product-card card-hover" data-category="biogas">
+          <div class="product-image">
+            <img src="biogas.png" alt="Reaktor Biogas Laut" />
+            <div class="product-badge">Terpopuler</div>
+            <div class="product-overlay">
+              <button class="btn btn-white quick-view-overlay" data-product="biogas">Lihat Demo</button>
+            </div>
+          </div>
+          <div class="product-content">
+            <div class="product-header">
+              <h3>Biogas</h3>
+              <div class="product-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-text">4.8/5</span>
+              </div>
+            </div>
+            <p class="product-description">
+              Sistem biogas inovatif yang mengkonversi limbah ikan menjadi energi terbarukan 
+              untuk kebutuhan rumah tangga dan industri kecil.
+            </p>
+            <div class="product-features">
+              <div class="feature">
+                <span class="feature-icon">⚡</span>
+                <span>Output: 2-5 m³/hari</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🕒</span>
+                <span>Retensi: 20-30 hari</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🌡️</span>
+                <span>Suhu: 35-40°C</span>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">
+                <span class="price">Teknologi</span>
+                <span class="price-note">Ramah Lingkungan</span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary quick-view" data-product="biogas">Lihat Demo</button>
+                <button class="btn btn-ghost wishlist-btn" data-product="biogas">
+                  <span class="wishlist-icon">🤍</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 2: BioOil Converter - KATEGORI DIPERBAIKI -->
+        <article class="product-card card-hover" data-category="biooil">
+          <div class="product-image">
+            <img src="biooil.png" alt="BioOil Converter" />
+            <div class="product-badge">Inovatif</div>
+            <div class="product-overlay">
+              <button class="btn btn-white quick-view-overlay" data-product="biooil">Lihat Demo</button>
+            </div>
+          </div>
+          <div class="product-content">
+            <div class="product-header">
+              <h3>BioOil</h3>
+              <div class="product-rating">
+                <span class="stars">★★★★☆</span>
+                <span class="rating-text">4.5/5</span>
+              </div>
+            </div>
+            <p class="product-description">
+              Teknologi pirolisis canggih untuk mengubah biomassa laut menjadi bio-oil 
+              berkualitas tinggi sebagai bahan bakar alternatif.
+            </p>
+            <div class="product-features">
+              <div class="feature">
+                <span class="feature-icon">🛢️</span>
+                <span>Yield: 35-45%</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🔥</span>
+                <span>Suhu: 400-600°C</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">⏱️</span>
+                <span>Proses: 2-4 jam</span>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">
+                <span class="price">Teknologi</span>
+                <span class="price-note">Efisiensi Tinggi</span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary quick-view" data-product="biooil">Lihat Demo</button>
+                <button class="btn btn-ghost wishlist-btn" data-product="biooil">
+                  <span class="wishlist-icon">🤍</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 3: Pupuk Cair - KATEGORI DIPERBAIKI -->
+        <article class="product-card card-hover" data-category="pupuk">
+          <div class="product-image">
+            <img src="pupuk.png" alt="Pupuk Cair Laut" />
+            <div class="product-badge">Organik</div>
+            <div class="product-overlay">
+              <button class="btn btn-white quick-view-overlay" data-product="pupuk">Lihat Demo</button>
+            </div>
+          </div>
+          <div class="product-content">
+            <div class="product-header">
+              <h3>Pupuk Cair</h3>
+              <div class="product-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-text">4.9/5</span>
+              </div>
+            </div>
+            <p class="product-description">
+              Pupuk organik cair kaya nutrisi dari residu proses biogas, ideal untuk 
+              pertanian pesisir dan budidaya tambak.
+            </p>
+            <div class="product-features">
+              <div class="feature">
+                <span class="feature-icon">🌿</span>
+                <span>NPK: 3-2-2</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">💧</span>
+                <span>pH: 6.5-7.5</span>
+              </div>
+              <div class="feature">
+                <span class="feature-icon">🦠</span>
+                <span>Mikroba Aktif</span>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">
+                <span class="price">Produk</span>
+                <span class="price-note">Ramah Lingkungan</span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary quick-view" data-product="pupuk">Lihat Demo</button>
+                <button class="btn btn-ghost wishlist-btn" data-product="pupuk">
+                  <span class="wishlist-icon">🤍</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO SECTION -->
+  <section class="demo-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Demo Interaktif Teknologi</h2>
+        <p class="section-subtitle">Lihat bagaimana teknologi MIVO bekerja dalam simulasi interaktif</p>
+      </div>
+
+      <div class="demo-container">
+        <div class="demo-header">
+          <h3 id="demoTitle">Reaktor Biogas Laut</h3>
+          <div class="demo-controls">
+            <button class="btn btn-outline" id="resetDemo">Reset</button>
+            <button class="btn btn-primary" id="startDemo">Mulai Demo</button>
+          </div>
+        </div>
+        
+        <div class="demo-animation biogas-animation" id="demoAnimation">
+          <!-- Animation elements will be added by JavaScript -->
+        </div>
+        
+        <div class="demo-stats" id="demoStats">
+          <!-- Stats will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO RANCANGAN ALAT SECTION -->
+<section class="video-section">
+  <div class="container">
+    <div class="video-container">
+      <div class="video-header">
+        <h2>Rancangan Alat & Teknologi MIVO</h2>
+        <p>Lihat proses desain dan pengembangan teknologi inovatif kami</p>
+      </div>
+      
+      <div class="video-wrapper">
+        <!-- Ganti URL dengan video rancangan alat Anda -->
+        <iframe 
+          src="video alat.mp4" 
+          title="Rancangan Alat MIVO" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+        
+        <!-- Placeholder jika video belum tersedia -->
+        <!--
+        <div class="video-placeholder">
+          <div class="video-placeholder-icon">🎬</div>
+          <h3>Video Rancangan Alat Segera Hadir</h3>
+          <p>Kami sedang mempersiapkan video demonstrasi lengkap tentang rancangan alat dan teknologi MIVO yang inovatif.</p>
+        </div>
+        -->
+      </div>
+      
+      <div class="video-info">
+        <h3>Teknologi Inovatif dalam Rancangan Alat Kami</h3>
+        <p>Video ini menunjukkan proses desain, pengembangan, dan implementasi teknologi MIVO yang mengubah limbah perikanan menjadi energi bersih dan produk bernilai ekonomi tinggi.</p>
+        
+        <div class="video-features">
+          <div class="video-feature">
+            <span class="video-feature-icon">🔧</span>
+            <span class="video-feature-text">Desain Ramah Lingkungan</span>
+          </div>
+          <div class="video-feature">
+            <span class="video-feature-icon">⚡</span>
+            <span class="video-feature-text">Teknologi Efisiensi Tinggi</span>
+          </div>
+          <div class="video-feature">
+            <span class="video-feature-icon">🔄</span>
+            <span class="video-feature-text">Proses Sirkular Terintegrasi</span>
+          </div>
+          <div class="video-feature">
+            <span class="video-feature-icon">📊</span>
+            <span class="video-feature-text">Monitoring Real-time</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- COMPARISON SECTION -->
+  <section class="comparison-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Perbandingan Teknologi</h2>
+        <p class="section-subtitle">Pilih solusi terbaik untuk kebutuhan Anda</p>
+      </div>
+
+      <div class="comparison-table">
+        <div class="comparison-header">
+          <div class="comparison-feature">Fitur</div>
+          <div class="comparison-product">Biogas</div>
+          <div class="comparison-product">BioOil</div>
+          <div class="comparison-product">Pupuk Cair</div>
+        </div>
+        
+        <div class="comparison-row">
+          <div class="comparison-feature">Input Material</div>
+          <div class="comparison-product">Limbah Ikan</div>
+          <div class="comparison-product">Biomassa Laut</div>
+          <div class="comparison-product">Digestate</div>
+        </div>
+        
+        <div class="comparison-row">
+          <div class="comparison-feature">Output Utama</div>
+          <div class="comparison-product">Biogas</div>
+          <div class="comparison-product">Bio-oil</div>
+          <div class="comparison-product">Pupuk Organik</div>
+        </div>
+        
+        <div class="comparison-row">
+          <div class="comparison-feature">Waktu Proses</div>
+          <div class="comparison-product">20-30 hari</div>
+          <div class="comparison-product">2-4 jam</div>
+          <div class="comparison-product">Instant</div>
+        </div>
+        
+        <div class="comparison-row">
+          <div class="comparison-feature">Skala</div>
+          <div class="comparison-product">Rumah Tangga - Industri Kecil</div>
+          <div class="comparison-product">Industri Menengah</div>
+          <div class="comparison-product">Semua Skala</div>
+        </div>
+        
+        <div class="comparison-row">
+          <div class="comparison-feature">Manfaat Lingkungan</div>
+          <div class="comparison-product">Pengurangan Emisi Metana</div>
+          <div class="comparison-product">Energi Terbarukan</div>
+          <div class="comparison-product">Pertanian Berkelanjutan</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <h2>Siap Mengadopsi Teknologi MIVO?</h2>
+          <p>Konsultasi gratis dengan tim ahli kami untuk solusi terbaik kebutuhan energi Anda</p>
+        </div>
+        <div class="cta-actions">
+          <a href="kontak.html" class="btn btn-white">Konsultasi Gratis</a>
+          <a href="lokasi.html" class="btn btn-outline">Lihat Demo Langsung</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <p>Marine Inovator - Energi Biru untuk Indonesia</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-section">
+            <h4>Navigasi</h4>
+            <a href="index.html">Beranda</a>
+            <a href="tentang.html">Tentang Kami</a>
+            <a href="produk.html">Produk</a>
+          </div>
+          <div class="footer-section">
+            <h4>Dukungan</h4>
+            <a href="lokasi.html">Peta Lokasi</a>
+            <a href="kontak.html">Kontak</a>
+            <a href="admin.html">Dashboard</a>
+          </div>
+          <div class="footer-section">
+            <h4>Legal</h4>
+            <a href="#">Kebijakan Privasi</a>
+            <a href="#">Syarat & Ketentuan</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 MIVO (Marine Inovator) | Energi Biru untuk Indonesia</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CHATBOT -->
+  <div id="chatbot-toggle">
+    <div class="chatbot-icon">💬</div>
+    <div class="chatbot-pulse"></div>
+  </div>
+  <div id="chatbox" class="hidden">
+    <div id="chat-header">
+      <span>Asisten MIVO</span>
+      <button id="chat-close">×</button>
+    </div>
+    <div id="chat-body"></div>
+    <div id="chat-footer">
+      <input id="chat-input" type="text" placeholder="Tanya tentang produk..." />
+      <button id="chat-send">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="auth.js"></script>
+  <script src="js/auth-header.js"></script>
+  <script>
+    // PERBAIKAN SCRIPT UNTUK FILTER DAN DEMO
+    document.addEventListener('DOMContentLoaded', function() {
+      // Setup Filtering
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const products = document.querySelectorAll('.product-card');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Update active state
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.dataset.filter;
+          
+          products.forEach(product => {
+            if (filter === 'all' || product.dataset.category === filter) {
+              product.style.display = 'block';
+              setTimeout(() => {
+                product.style.opacity = '1';
+                product.style.transform = 'translateY(0)';
+              }, 100);
+            } else {
+              product.style.opacity = '0';
+              product.style.transform = 'translateY(20px)';
+              setTimeout(() => {
+                product.style.display = 'none';
+              }, 300);
+            }
+          });
+        });
+      });
+
+      // Setup Demo Functionality
+      const quickViewBtns = document.querySelectorAll('.quick-view, .quick-view-overlay');
+      let currentDemo = 'biogas';
+      
+      quickViewBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const productId = btn.dataset.product;
+          currentDemo = productId;
+          showDemo(productId);
+        });
+      });
+
+      function showDemo(productId) {
+        const productData = getProductData(productId);
+        
+        if (productData) {
+          // Update demo section
+          const demoTitle = document.getElementById('demoTitle');
+          if (demoTitle) {
+            demoTitle.textContent = productData.title;
+          }
+          setupDemoAnimation(productId);
+          setupDemoStats(productId);
+          
+          // Scroll to demo section
+          const demoSection = document.querySelector('.demo-section');
+          if (demoSection) {
+            demoSection.scrollIntoView({ 
+              behavior: 'smooth' 
+            });
+          }
+        }
+      }
+
+      function setupDemoAnimation(productId) {
+        const animationContainer = document.getElementById('demoAnimation');
+        if (!animationContainer) return;
+        
+        animationContainer.innerHTML = '';
+        animationContainer.className = 'demo-animation';
+        
+        // Add specific class based on product
+        animationContainer.classList.add(`${productId}-animation`);
+        
+        if (productId === 'biogas') {
+          setupBiogasAnimation(animationContainer);
+        } else if (productId === 'biooil') {
+          setupBiooilAnimation(animationContainer);
+        } else if (productId === 'pupuk') {
+          setupPupukAnimation(animationContainer);
+        }
+      }
+
+      function setupBiogasAnimation(container) {
+        // Input material (fish waste)
+        const input = document.createElement('div');
+        input.className = 'animation-element input-material';
+        input.innerHTML = '🐟';
+        input.style.left = '50px';
+        input.style.top = '120px';
+        input.style.backgroundColor = '#ffeb3b';
+        container.appendChild(input);
+        
+        // Process arrow 1
+        const arrow1 = document.createElement('div');
+        arrow1.className = 'animation-element process-arrow';
+        arrow1.style.left = '130px';
+        arrow1.style.top = '145px';
+        container.appendChild(arrow1);
+        
+        // Biogas reactor
+        const reactor = document.createElement('div');
+        reactor.className = 'animation-element process-chamber';
+        reactor.innerHTML = '⚗️';
+        reactor.style.left = '180px';
+        reactor.style.top = '90px';
+        container.appendChild(reactor);
+        
+        // Process arrow 2
+        const arrow2 = document.createElement('div');
+        arrow2.className = 'animation-element process-arrow';
+        arrow2.style.left = '320px';
+        arrow2.style.top = '145px';
+        container.appendChild(arrow2);
+        
+        // Biogas output
+        const biogas = document.createElement('div');
+        biogas.className = 'animation-element output-product';
+        biogas.innerHTML = '🔥';
+        biogas.style.left = '370px';
+        biogas.style.top = '110px';
+        biogas.style.backgroundColor = '#ff9800';
+        container.appendChild(biogas);
+        
+        // Fertilizer output
+        const fertilizer = document.createElement('div');
+        fertilizer.className = 'animation-element output-product';
+        fertilizer.innerHTML = '🌿';
+        fertilizer.style.left = '370px';
+        fertilizer.style.top = '210px';
+        fertilizer.style.backgroundColor = '#8bc34a';
+        container.appendChild(fertilizer);
+        
+        // Arrow to fertilizer
+        const arrow3 = document.createElement('div');
+        arrow3.className = 'animation-element process-arrow';
+        arrow3.style.left = '320px';
+        arrow3.style.top = '245px';
+        arrow3.style.transform = 'rotate(90deg)';
+        container.appendChild(arrow3);
+      }
+
+      function setupBiooilAnimation(container) {
+        // Input material (biomass)
+        const input = document.createElement('div');
+        input.className = 'animation-element input-material';
+        input.innerHTML = '🌿';
+        input.style.left = '50px';
+        input.style.top = '120px';
+        input.style.backgroundColor = '#8bc34a';
+        container.appendChild(input);
+        
+        // Process arrow 1
+        const arrow1 = document.createElement('div');
+        arrow1.className = 'animation-element process-arrow';
+        arrow1.style.left = '130px';
+        arrow1.style.top = '145px';
+        container.appendChild(arrow1);
+        
+        // Pyrolysis reactor
+        const reactor = document.createElement('div');
+        reactor.className = 'animation-element process-chamber';
+        reactor.innerHTML = '🔥';
+        reactor.style.left = '180px';
+        reactor.style.top = '90px';
+        container.appendChild(reactor);
+        
+        // Process arrow 2
+        const arrow2 = document.createElement('div');
+        arrow2.className = 'animation-element process-arrow';
+        arrow2.style.left = '320px';
+        arrow2.style.top = '145px';
+        container.appendChild(arrow2);
+        
+        // Biooil output
+        const biooil = document.createElement('div');
+        biooil.className = 'animation-element output-product';
+        biooil.innerHTML = '🛢️';
+        biooil.style.left = '370px';
+        biooil.style.top = '110px';
+        biooil.style.backgroundColor = '#795548';
+        container.appendChild(biooil);
+        
+        // Biochar output
+        const biochar = document.createElement('div');
+        biochar.className = 'animation-element output-product';
+        biochar.innerHTML = '⚫';
+        biochar.style.left = '370px';
+        biochar.style.top = '210px';
+        biochar.style.backgroundColor = '#3e2723';
+        container.appendChild(biochar);
+        
+        // Arrow to biochar
+        const arrow3 = document.createElement('div');
+        arrow3.className = 'animation-element process-arrow';
+        arrow3.style.left = '320px';
+        arrow3.style.top = '245px';
+        arrow3.style.transform = 'rotate(90deg)';
+        container.appendChild(arrow3);
+      }
+
+      function setupPupukAnimation(container) {
+        // Input material (digestate)
+        const input = document.createElement('div');
+        input.className = 'animation-element input-material';
+        input.innerHTML = '💧';
+        input.style.left = '50px';
+        input.style.top = '120px';
+        input.style.backgroundColor = '#4fc3f7';
+        container.appendChild(input);
+        
+        // Process arrow 1
+        const arrow1 = document.createElement('div');
+        arrow1.className = 'animation-element process-arrow';
+        arrow1.style.left = '130px';
+        arrow1.style.top = '145px';
+        container.appendChild(arrow1);
+        
+        // Mixing tank
+        const tank = document.createElement('div');
+        tank.className = 'animation-element process-chamber';
+        tank.innerHTML = '🔄';
+        tank.style.left = '180px';
+        tank.style.top = '90px';
+        container.appendChild(tank);
+        
+        // Process arrow 2
+        const arrow2 = document.createElement('div');
+        arrow2.className = 'animation-element process-arrow';
+        arrow2.style.left = '320px';
+        arrow2.style.top = '145px';
+        container.appendChild(arrow2);
+        
+        // Fertilizer output
+        const fertilizer = document.createElement('div');
+        fertilizer.className = 'animation-element output-product';
+        fertilizer.innerHTML = '🌱';
+        fertilizer.style.left = '370px';
+        fertilizer.style.top = '110px';
+        fertilizer.style.backgroundColor = '#66bb6a';
+        container.appendChild(fertilizer);
+        
+        // Plants growing
+        const plants = document.createElement('div');
+        plants.className = 'animation-element';
+        plants.innerHTML = '🌾🌽';
+        plants.style.left = '450px';
+        plants.style.top = '120px';
+        plants.style.fontSize = '2rem';
+        container.appendChild(plants);
+      }
+
+      function setupDemoStats(productId) {
+        const statsContainer = document.getElementById('demoStats');
+        if (!statsContainer) return;
+        
+        statsContainer.innerHTML = '';
+        
+        let stats = [];
+        
+        if (productId === 'biogas') {
+          stats = [
+            { value: '2-5 m³/hari', label: 'Produksi Biogas' },
+            { value: '20-30 hari', label: 'Waktu Proses' },
+            { value: '85%', label: 'Efisiensi' },
+            { value: '10+ tahun', label: 'Masa Pakai' }
+          ];
+        } else if (productId === 'biooil') {
+          stats = [
+            { value: '35-45%', label: 'Yield Bio-oil' },
+            { value: '2-4 jam', label: 'Waktu Proses' },
+            { value: '400-600°C', label: 'Suhu Operasi' },
+            { value: '50 kg/jam', label: 'Kapasitas' }
+          ];
+        } else if (productId === 'pupuk') {
+          stats = [
+            { value: '3-2-2', label: 'Kandungan NPK' },
+            { value: '6.5-7.5', label: 'pH Optimal' },
+            { value: '10^8 CFU/ml', label: 'Mikroba Aktif' },
+            { value: '40%', label: 'Peningkatan Hasil' }
+          ];
+        }
+        
+        stats.forEach(stat => {
+          const statCard = document.createElement('div');
+          statCard.className = 'stat-card';
+          statCard.innerHTML = `
+            <div class="stat-value">${stat.value}</div>
+            <div class="stat-label">${stat.label}</div>
+          `;
+          statsContainer.appendChild(statCard);
+        });
+      }
+
+      function getProductData(productId) {
+        const products = {
+          'biogas': {
+            title: 'Biogas',
+            description: 'Sistem biogas inovatif yang mengkonversi limbah ikan menjadi energi terbarukan untuk kebutuhan rumah tangga dan industri kecil.'
+          },
+          'biooil': {
+            title: 'BioOil',
+            description: 'Teknologi pirolisis canggih untuk mengubah biomassa laut menjadi bio-oil berkualitas tinggi sebagai bahan bakar alternatif.'
+          },
+          'pupuk': {
+            title: 'Pupuk Cair',
+            description: 'Pupuk organik cair kaya nutrisi dari residu proses biogas, ideal untuk pertanian pesisir dan budidaya tambak.'
+          }
+        };
+
+        return products[productId];
+      }
+
+      // Setup Demo Controls
+      const startBtn = document.getElementById('startDemo');
+      const resetBtn = document.getElementById('resetDemo');
+      let isAnimating = false;
+      
+      if (startBtn) {
+        startBtn.addEventListener('click', () => {
+          startAnimation();
+        });
+      }
+      
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          resetAnimation();
+        });
+      }
+
+      function startAnimation() {
+        if (isAnimating) return;
+        
+        isAnimating = true;
+        const elements = document.querySelectorAll('#demoAnimation .animation-element');
+        
+        // Reset positions first
+        elements.forEach(el => {
+          el.style.transform = 'translateX(0)';
+          el.style.opacity = '1';
+        });
+        
+        // Animate elements in sequence
+        elements.forEach((el, index) => {
+          setTimeout(() => {
+            if (el.classList.contains('input-material')) {
+              el.style.transform = 'translateX(80px)';
+            } else if (el.classList.contains('process-arrow')) {
+              el.style.opacity = '0.3';
+              setTimeout(() => {
+                el.style.opacity = '1';
+              }, 500);
+            } else if (el.classList.contains('process-chamber')) {
+              el.style.transform = 'scale(1.1)';
+              setTimeout(() => {
+                el.style.transform = 'scale(1)';
+              }, 500);
+            } else if (el.classList.contains('output-product')) {
+              el.style.transform = 'scale(1.2)';
+              setTimeout(() => {
+                el.style.transform = 'scale(1)';
+              }, 500);
+            }
+          }, index * 800);
+        });
+        
+        // Reset animation state after completion
+        setTimeout(() => {
+          isAnimating = false;
+        }, elements.length * 800 + 1000);
+      }
+
+      function resetAnimation() {
+        const elements = document.querySelectorAll('#demoAnimation .animation-element');
+        
+        elements.forEach(el => {
+          el.style.transform = '';
+          el.style.opacity = '';
+        });
+        
+        isAnimating = false;
+      }
+
+      // Initialize with Biogas demo
+      setupDemoAnimation('biogas');
+      setupDemoStats('biogas');
+    });
+  </script>
+</body>
+</html>

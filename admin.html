@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard Admin | MIVO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Dashboard Admin yang Diperbaiki */
+    :root {
+      --primary: #0077b6;
+      --primary-dark: #005885;
+      --accent: #00b4d8;
+      --accent-light: #90e0ef;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --neutral: #6b7280;
+      --neutral-light: #9ca3af;
+      --neutral-dark: #374151;
+      --background: #f8fafc;
+      --card-bg: #ffffff;
+      --sidebar-bg: #1e293b;
+      --sidebar-hover: #334155;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--neutral-dark);
+      line-height: 1.6;
+    }
+
+    /* Layout Baru dengan Sidebar */
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      color: white;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #334155;
+      text-align: center;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: white;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .sidebar-brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .sidebar-nav {
+      padding: 1rem 0;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1.5rem;
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: white;
+      border-left-color: var(--accent);
+    }
+
+    .nav-item.active {
+      background: var(--sidebar-hover);
+      color: white;
+      border-left-color: var(--accent);
+    }
+
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .admin-main {
+      flex: 1;
+      margin-left: 260px;
+      padding: 0;
+    }
+
+    /* Header yang Diperbaiki */
+    .admin-header {
+      background: var(--card-bg);
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .header-title p {
+      color: var(--neutral);
+      margin: 0;
+      font-size: 0.875rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Dashboard Content */
+    .dashboard-content {
+      padding: 2rem;
+    }
+
+    /* Stats Grid yang Diperbaiki */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    .stat-card.primary { border-left-color: var(--primary); }
+    .stat-card.accent { border-left-color: var(--accent); }
+    .stat-card.warning { border-left-color: var(--warning); }
+    .stat-card.success { border-left-color: var(--success); }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .stat-card.primary .stat-icon { background: rgba(0, 119, 182, 0.1); color: var(--primary); }
+    .stat-card.accent .stat-icon { background: rgba(0, 180, 216, 0.1); color: var(--accent); }
+    .stat-card.warning .stat-icon { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+    .stat-card.success .stat-icon { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      color: var(--neutral);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .stat-change {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .stat-change.positive { color: var(--success); }
+    .stat-change.negative { color: var(--danger); }
+
+    /* Table Improvements */
+    .dashboard-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .card-header h2 {
+      color: var(--primary);
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      padding: 0.625rem 1rem 0.625rem 2.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      width: 280px;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--neutral-light);
+    }
+
+    /* Table Styling */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th {
+      background: #f8fafc;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--neutral-dark);
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      font-size: 0.875rem;
+    }
+
+    .table th:hover {
+      background: #f1f5f9;
+    }
+
+    .table th::after {
+      content: "↕";
+      margin-left: 0.5rem;
+      opacity: 0.5;
+      font-size: 0.75rem;
+    }
+
+    .table th.sorted-asc::after {
+      content: "▲";
+      opacity: 1;
+    }
+
+    .table th.sorted-desc::after {
+      content: "▼";
+      opacity: 1;
+    }
+
+    .table td {
+      padding: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.875rem;
+    }
+
+    .table tr:hover {
+      background: #f8fafc;
+    }
+
+    .message-preview {
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .message-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-icon {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+    }
+
+    .btn-view {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .btn-view:hover {
+      background: #bbdefb;
+      transform: scale(1.05);
+    }
+
+    .btn-delete {
+      background: #ffebee;
+      color: #d32f2f;
+    }
+
+    .btn-delete:hover {
+      background: #ffcdd2;
+      transform: scale(1.05);
+    }
+
+    /* Pagination */
+    .table-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .table-info {
+      color: var(--neutral);
+      font-size: 0.875rem;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .pagination-item {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #e5e7eb;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.875rem;
+    }
+
+    .pagination-item:hover {
+      background: #f8fafc;
+      border-color: var(--accent);
+    }
+
+    .pagination-item.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pagination-item.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination-dots {
+      padding: 0.5rem 0.25rem;
+      color: var(--neutral);
+    }
+
+    /* User Menu */
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    .user-menu:hover {
+      background: #f8fafc;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--accent);
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .user-role {
+      font-size: 0.75rem;
+      color: var(--neutral);
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      padding: 0.5rem;
+      min-width: 180px;
+      display: none;
+      z-index: 1000;
+      border: 1px solid #e5e7eb;
+    }
+
+    .user-menu:hover .user-dropdown {
+      display: block;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      color: var(--neutral-dark);
+      border-radius: 8px;
+      transition: background 0.3s;
+      font-size: 0.875rem;
+    }
+
+    .dropdown-item:hover {
+      background: #f8fafc;
+    }
+
+    .dropdown-item i {
+      width: 16px;
+      text-align: center;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--neutral);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      margin-bottom: 0.5rem;
+      color: var(--neutral-dark);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 119, 182, 0.3);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-accent:hover {
+      background: #0093b3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .sidebar-brand img {
+      width: 130px !important;
+      height: 45px !important;
+      border-radius: 12px !important;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: var(--primary);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--neutral);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    /* New Message Indicator */
+    .new-message-badge {
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-new {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    .status-read {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .notification.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .notification.error {
+      background: var(--danger);
+      color: white;
+    }
+
+    .notification.warning {
+      background: var(--warning);
+      color: white;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .admin-sidebar {
+        width: 80px;
+      }
+      
+      .admin-main {
+        margin-left: 80px;
+      }
+      
+      .sidebar-brand span,
+      .nav-item span {
+        display: none;
+      }
+      
+      .nav-item {
+        justify-content: center;
+        padding: 1rem;
+      }
+      
+      .sidebar-header {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .admin-main {
+        margin-left: 0;
+      }
+      
+      .dashboard-content {
+        padding: 1rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .card-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .card-actions {
+        justify-content: stretch;
+      }
+      
+      .search-box input {
+        width: 100%;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+      
+      .header-actions {
+        justify-content: space-between;
+      }
+      
+      .table-footer {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-card, .dashboard-card {
+      animation: fadeIn 0.6s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand">
+          <img src="logo mivo.png" alt="MIVO Logo" />
+        </a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="index.html" class="nav-item">
+          <i class="fas fa-home"></i>
+          <span>Beranda</span>
+        </a>
+        <a href="tentang.html" class="nav-item">
+          <i class="fas fa-info-circle"></i>
+          <span>Tentang Kami</span>
+        </a>
+        <a href="produk.html" class="nav-item">
+          <i class="fas fa-box"></i>
+          <span>Produk</span>
+        </a>
+        <a href="lokasi.html" class="nav-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Peta Lokasi</span>
+        </a>
+        <a href="kontak.html" class="nav-item">
+          <i class="fas fa-envelope"></i>
+          <span>Kontak</span>
+        </a>
+        <a href="admin.html" class="nav-item active">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+          <span class="new-message-badge" id="newMessageBadge" style="display: none;">0</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <!-- Header yang Diperbaiki -->
+      <header class="admin-header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>Dashboard Admin</h1>
+            <p>Kelola dan pantau semua pesan masuk dari pengunjung</p>
+          </div>
+          
+          <div class="header-actions">
+            <button class="btn btn-primary" id="exportBtn">
+              <i class="fas fa-download"></i>
+              <span>Export Data</span>
+            </button>
+            <button class="btn btn-accent" id="refreshBtn">
+              <i class="fas fa-sync-alt"></i>
+              <span>Refresh</span>
+            </button>
+            
+            <div class="user-menu">
+              <div class="user-avatar">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Admin" />
+              </div>
+              <div class="user-info">
+                <div class="user-name" id="adminName">Admin MIVO</div>
+                <div class="user-role">Administrator</div>
+              </div>
+              <div class="user-dropdown">
+                <a href="profil.html" class="dropdown-item">
+                  <i class="fas fa-user"></i>
+                  <span>Profil</span>
+                </a>
+                <a href="#" class="dropdown-item" id="logoutBtn">
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span>Logout</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <div class="dashboard-content">
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+          <!-- Stats akan diisi oleh JavaScript -->
+        </div>
+
+        <!-- Messages Table -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2><i class="fas fa-inbox"></i> Pesan Masuk</h2>
+            <div class="card-actions">
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari pesan..." />
+              </div>
+              <button class="btn btn-danger" id="clearAllBtn">
+                <i class="fas fa-trash"></i>
+                <span>Hapus Semua</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table" id="messageTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th data-sort="name">Nama</th>
+                  <th data-sort="email">Email</th>
+                  <th>Telepon</th>
+                  <th data-sort="subject">Subjek</th>
+                  <th data-sort="message">Pesan</th>
+                  <th data-sort="timestamp">Waktu</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="messageTableBody">
+                <!-- Messages akan diisi oleh JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <div class="table-info" id="tableInfo">Menampilkan 0-0 dari 0 pesan</div>
+            <div class="pagination" id="pagination">
+              <!-- Pagination akan diisi oleh JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Message Detail Modal -->
+  <div class="modal" id="messageModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Detail Pesan</h3>
+        <button class="close-modal" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Message details akan diisi oleh JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript untuk Dashboard Admin dengan real-time updates
+    class AdminDashboard {
+      constructor() {
+        this.messages = [];
+        this.currentPage = 1;
+        this.itemsPerPage = 10;
+        this.sortField = 'timestamp';
+        this.sortDirection = 'desc';
+        this.searchTerm = '';
+        this.lastUpdate = null;
+        this.autoRefreshInterval = null;
+        
+        this.init();
+      }
+
+      init() {
+        // Check authentication first
+        if (!this.checkAuth()) {
+          return;
+        }
+        
+        this.loadMessages();
+        this.setupEventListeners();
+        this.renderStats();
+        this.renderMessages();
+        this.startAutoRefresh();
+        this.updateAdminInfo();
+      }
+
+      checkAuth() {
+        const isAuthenticated = localStorage.getItem('adminAuthenticated');
+        const userRole = localStorage.getItem('userRole');
+        
+        if (!isAuthenticated || userRole !== 'admin') {
+          // Redirect to login page with message
+          this.showNotification('Anda harus login sebagai admin untuk mengakses dashboard!', 'error');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+          return false;
+        }
+        return true;
+      }
+
+      updateAdminInfo() {
+        const userName = localStorage.getItem('userName');
+        if (userName) {
+          document.getElementById('adminName').textContent = userName;
+        }
+      }
+
+      loadMessages() {
+        try {
+          const storedMessages = JSON.parse(localStorage.getItem("messages")) || [];
+          this.messages = storedMessages;
+          this.lastUpdate = Date.now();
+          this.updateNewMessageBadge();
+        } catch (error) {
+          console.error('Error loading messages:', error);
+          this.messages = [];
+        }
+      }
+
+      setupEventListeners() {
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+          this.searchTerm = e.target.value.toLowerCase();
+          this.currentPage = 1;
+          this.renderMessages();
+        });
+
+        // Sort functionality
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+          th.addEventListener('click', () => {
+            const field = th.getAttribute('data-sort');
+            this.handleSort(field);
+          });
+        });
+
+        // Refresh button
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+          this.refreshData();
+        });
+
+        // Export button
+        document.getElementById('exportBtn').addEventListener('click', () => {
+          this.exportData();
+        });
+
+        // Clear all button
+        document.getElementById('clearAllBtn').addEventListener('click', () => {
+          this.clearAllMessages();
+        });
+
+        // Modal close
+        document.getElementById('closeModal').addEventListener('click', () => {
+          this.closeModal();
+        });
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+          e.preventDefault();
+          this.logout();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('messageModal').addEventListener('click', (e) => {
+          if (e.target.id === 'messageModal') {
+            this.closeModal();
+          }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+          if (e.ctrlKey && e.key === 'r') {
+            e.preventDefault();
+            this.refreshData();
+          }
+          if (e.key === 'Escape') {
+            this.closeModal();
+          }
+        });
+      }
+
+      handleSort(field) {
+        if (this.sortField === field) {
+          this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.sortField = field;
+          this.sortDirection = 'desc';
+        }
+        
+        // Update sort indicators
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+          th.classList.remove('sorted-asc', 'sorted-desc');
+        });
+        
+        const currentTh = document.querySelector(`th[data-sort="${field}"]`);
+        if (currentTh) {
+          currentTh.classList.add(this.sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        }
+        
+        this.renderMessages();
+      }
+
+      refreshData() {
+        this.loadMessages();
+        this.renderStats();
+        this.renderMessages();
+        
+        // Show refresh feedback
+        const refreshBtn = document.getElementById('refreshBtn');
+        const originalHtml = refreshBtn.innerHTML;
+        refreshBtn.innerHTML = '<i class="fas fa-check"></i><span>Diperbarui</span>';
+        refreshBtn.disabled = true;
+        
+        this.showNotification('Data berhasil diperbarui', 'success');
+        
+        setTimeout(() => {
+          refreshBtn.innerHTML = originalHtml;
+          refreshBtn.disabled = false;
+        }, 2000);
+      }
+
+      startAutoRefresh() {
+        // Refresh data every 30 seconds
+        this.autoRefreshInterval = setInterval(() => {
+          this.refreshData();
+        }, 30000);
+      }
+
+      stopAutoRefresh() {
+        if (this.autoRefreshInterval) {
+          clearInterval(this.autoRefreshInterval);
+        }
+      }
+
+      updateNewMessageBadge() {
+        const newMessages = this.messages.filter(msg => msg.status === 'new').length;
+        const badge = document.getElementById('newMessageBadge');
+        
+        if (newMessages > 0) {
+          badge.textContent = newMessages;
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+
+      renderStats() {
+        const statsGrid = document.getElementById('statsGrid');
+        const totalMessages = this.messages.length;
+        const newMessages = this.messages.filter(msg => msg.status === 'new').length;
+        const today = new Date().toDateString();
+        const todayMessages = this.messages.filter(msg => 
+          new Date(msg.timestamp).toDateString() === today
+        ).length;
+        const readMessages = this.messages.filter(msg => msg.read).length;
+
+        const stats = [
+          {
+            title: 'Total Pesan',
+            value: totalMessages,
+            icon: 'fas fa-envelope',
+            type: 'primary',
+            change: '+12%'
+          },
+          {
+            title: 'Pesan Baru',
+            value: newMessages,
+            icon: 'fas fa-star',
+            type: 'accent',
+            change: '+5%'
+          },
+          {
+            title: 'Pesan Hari Ini',
+            value: todayMessages,
+            icon: 'fas fa-calendar-day',
+            type: 'warning',
+            change: '+8%'
+          },
+          {
+            title: 'Sudah Dibaca',
+            value: readMessages,
+            icon: 'fas fa-check-circle',
+            type: 'success',
+            change: '+15%'
+          }
+        ];
+
+        statsGrid.innerHTML = stats.map(stat => `
+          <div class="stat-card ${stat.type}">
+            <div class="stat-header">
+              <div>
+                <div class="stat-number">${stat.value}</div>
+                <div class="stat-label">${stat.title}</div>
+                <div class="stat-change positive">${stat.change}</div>
+              </div>
+              <div class="stat-icon">
+                <i class="${stat.icon}"></i>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderMessages() {
+        const filteredMessages = this.filterMessages();
+        const sortedMessages = this.sortMessages(filteredMessages);
+        const paginatedMessages = this.paginateMessages(sortedMessages);
+        
+        this.renderTable(paginatedMessages);
+        this.renderPagination(filteredMessages.length);
+        this.updateTableInfo(filteredMessages.length);
+      }
+
+      filterMessages() {
+        if (!this.searchTerm) {
+          return this.messages;
+        }
+        
+        return this.messages.filter(message => 
+          message.name.toLowerCase().includes(this.searchTerm) ||
+          message.email.toLowerCase().includes(this.searchTerm) ||
+          message.subject.toLowerCase().includes(this.searchTerm) ||
+          message.message.toLowerCase().includes(this.searchTerm)
+        );
+      }
+
+      sortMessages(messages) {
+        return messages.sort((a, b) => {
+          let aValue = a[this.sortField];
+          let bValue = b[this.sortField];
+          
+          // Handle timestamp sorting
+          if (this.sortField === 'timestamp') {
+            aValue = a.timestamp;
+            bValue = b.timestamp;
+          }
+          
+          if (this.sortDirection === 'asc') {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        });
+      }
+
+      paginateMessages(messages) {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        return messages.slice(startIndex, endIndex);
+      }
+
+      renderTable(messages) {
+        const tbody = document.getElementById('messageTableBody');
+        
+        if (messages.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="9">
+                <div class="empty-state">
+                  <i class="fas fa-inbox"></i>
+                  <h3>Tidak ada pesan</h3>
+                  <p>${this.searchTerm ? 'Tidak ada pesan yang sesuai dengan pencarian' : 'Belum ada pesan yang masuk'}</p>
+                </div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = messages.map((message, index) => {
+          const globalIndex = (this.currentPage - 1) * this.itemsPerPage + index + 1;
+          const messagePreview = message.message.length > 50 
+            ? message.message.substring(0, 50) + '...' 
+            : message.message;
+          
+          const statusClass = message.status === 'new' ? 'status-new' : 'status-read';
+          const statusText = message.status === 'new' ? 'Baru' : 'Dibaca';
+          
+          return `
+            <tr class="${message.status === 'new' ? 'new-message' : ''}">
+              <td>${globalIndex}</td>
+              <td><strong>${message.name}</strong></td>
+              <td>${message.email}</td>
+              <td>${message.phone || '-'}</td>
+              <td>${this.capitalizeFirstLetter(message.subject)}</td>
+              <td class="message-preview" title="${message.message}">${messagePreview}</td>
+              <td>${message.waktu}</td>
+              <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+              <td>
+                <div class="message-actions">
+                  <button class="btn-icon btn-view" onclick="adminDashboard.viewMessage('${message.id}')" title="Lihat Detail">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn-icon btn-delete" onclick="adminDashboard.deleteMessage('${message.id}')" title="Hapus Pesan">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      renderPagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+        const pagination = document.getElementById('pagination');
+        
+        if (totalPages <= 1) {
+          pagination.innerHTML = '';
+          return;
+        }
+
+        let paginationHTML = '';
+        
+        // Previous button
+        paginationHTML += `
+          <div class="pagination-item ${this.currentPage === 1 ? 'disabled' : ''}" 
+               onclick="${this.currentPage > 1 ? `adminDashboard.goToPage(${this.currentPage - 1})` : ''}">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+        `;
+
+        // Page numbers
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        if (startPage > 1) {
+          paginationHTML += `
+            <div class="pagination-item" onclick="adminDashboard.goToPage(1)">1</div>
+            <div class="pagination-dots">...</div>
+          `;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          paginationHTML += `
+            <div class="pagination-item ${i === this.currentPage ? 'active' : ''}" 
+                 onclick="adminDashboard.goToPage(${i})">
+              ${i}
+            </div>
+          `;
+        }
+
+        if (endPage < totalPages) {
+          paginationHTML += `
+            <div class="pagination-dots">...</div>
+            <div class="pagination-item" onclick="adminDashboard.goToPage(${totalPages})">${totalPages}</div>
+          `;
+        }
+
+        // Next button
+        paginationHTML += `
+          <div class="pagination-item ${this.currentPage === totalPages ? 'disabled' : ''}" 
+               onclick="${this.currentPage < totalPages ? `adminDashboard.goToPage(${this.currentPage + 1})` : ''}">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        `;
+
+        pagination.innerHTML = paginationHTML;
+      }
+
+      updateTableInfo(totalItems) {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage + 1;
+        const endIndex = Math.min(startIndex + this.itemsPerPage - 1, totalItems);
+        
+        const tableInfo = document.getElementById('tableInfo');
+        if (tableInfo) {
+          tableInfo.textContent = `Menampilkan ${startIndex}-${endIndex} dari ${totalItems} pesan`;
+        }
+      }
+
+      goToPage(page) {
+        this.currentPage = page;
+        this.renderMessages();
+      }
+
+      viewMessage(messageId) {
+        const message = this.messages.find(msg => msg.id === messageId);
+        if (!message) return;
+
+        // Mark as read
+        if (message.status === 'new') {
+          message.status = 'read';
+          message.read = true;
+          this.saveMessages();
+          this.updateNewMessageBadge();
+          this.renderStats();
+        }
+
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+          <div class="message-detail">
+            <div class="detail-section">
+              <h4>Informasi Pengirim</h4>
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <label>Nama Lengkap:</label>
+                  <span>${message.name}</span>
+                </div>
+                <div class="detail-item">
+                  <label>Email:</label>
+                  <span>${message.email}</span>
+                </div>
+                <div class="detail-item">
+                  <label>Telepon:</label>
+                  <span>${message.phone || 'Tidak diisi'}</span>
+                </div>
+                <div class="detail-item">
+                  <label>Subjek:</label>
+                  <span>${this.capitalizeFirstLetter(message.subject)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="detail-section">
+              <h4>Pesan</h4>
+              <div class="message-content">
+                ${message.message}
+              </div>
+            </div>
+            
+            <div class="detail-section">
+              <h4>Informasi Tambahan</h4>
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <label>Waktu Kirim:</label>
+                  <span>${message.waktu}</span>
+                </div>
+                <div class="detail-item">
+                  <label>Status:</label>
+                  <span class="status-badge ${message.status === 'new' ? 'status-new' : 'status-read'}">
+                    ${message.status === 'new' ? 'Baru' : 'Dibaca'}
+                  </span>
+                </div>
+                <div class="detail-item">
+                  <label>ID Pesan:</label>
+                  <span>${message.id}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <h4>Aksi</h4>
+              <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary" onclick="adminDashboard.replyToMessage('${message.email}')">
+                  <i class="fas fa-reply"></i> Balas Email
+                </button>
+                <button class="btn btn-accent" onclick="adminDashboard.markAsUnread('${message.id}')">
+                  <i class="fas fa-envelope"></i> Tandai Belum Dibaca
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <style>
+            .message-detail {
+              display: flex;
+              flex-direction: column;
+              gap: 1.5rem;
+            }
+            .detail-section {
+              border: 1px solid #e5e7eb;
+              border-radius: 12px;
+              padding: 1.5rem;
+            }
+            .detail-section h4 {
+              margin: 0 0 1rem 0;
+              color: var(--primary);
+              font-size: 1.1rem;
+            }
+            .detail-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 1rem;
+            }
+            .detail-item {
+              display: flex;
+              flex-direction: column;
+              gap: 0.25rem;
+            }
+            .detail-item label {
+              font-weight: 600;
+              color: var(--neutral-dark);
+              font-size: 0.875rem;
+            }
+            .detail-item span {
+              color: var(--neutral);
+            }
+            .message-content {
+              background: #f8fafc;
+              padding: 1rem;
+              border-radius: 8px;
+              border-left: 4px solid var(--accent);
+              line-height: 1.6;
+              white-space: pre-wrap;
+            }
+            @media (max-width: 768px) {
+              .detail-grid {
+                grid-template-columns: 1fr;
+              }
+            }
+          </style>
+        `;
+
+        document.getElementById('messageModal').style.display = 'flex';
+      }
+
+      closeModal() {
+        document.getElementById('messageModal').style.display = 'none';
+        this.renderMessages(); // Refresh to update status
+      }
+
+      replyToMessage(email) {
+        window.open(`mailto:${email}`, '_blank');
+      }
+
+      markAsUnread(messageId) {
+        const message = this.messages.find(msg => msg.id === messageId);
+        if (message) {
+          message.status = 'new';
+          message.read = false;
+          this.saveMessages();
+          this.closeModal();
+          this.renderStats();
+          this.renderMessages();
+          this.updateNewMessageBadge();
+          this.showNotification('Pesan ditandai sebagai belum dibaca', 'success');
+        }
+      }
+
+      deleteMessage(messageId) {
+        if (confirm('Apakah Anda yakin ingin menghapus pesan ini?')) {
+          this.messages = this.messages.filter(msg => msg.id !== messageId);
+          this.saveMessages();
+          this.renderStats();
+          this.renderMessages();
+          this.updateNewMessageBadge();
+          this.showNotification('Pesan berhasil dihapus', 'success');
+        }
+      }
+
+      clearAllMessages() {
+        if (this.messages.length === 0) {
+          this.showNotification('Tidak ada pesan untuk dihapus.', 'warning');
+          return;
+        }
+
+        if (confirm('Apakah Anda yakin ingin menghapus SEMUA pesan? Tindakan ini tidak dapat dibatalkan.')) {
+          this.messages = [];
+          this.saveMessages();
+          this.renderStats();
+          this.renderMessages();
+          this.updateNewMessageBadge();
+          this.showNotification('Semua pesan berhasil dihapus', 'success');
+        }
+      }
+
+      exportData() {
+        if (this.messages.length === 0) {
+          this.showNotification('Tidak ada data untuk diexport.', 'warning');
+          return;
+        }
+
+        const csvContent = this.convertToCSV(this.messages);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', `messages_export_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        this.showNotification('Data berhasil diexport ke CSV', 'success');
+      }
+
+      convertToCSV(messages) {
+        const headers = ['Nama', 'Email', 'Telepon', 'Subjek', 'Pesan', 'Waktu', 'Status'];
+        const csvRows = [headers.join(',')];
+        
+        messages.forEach(message => {
+          const row = [
+            `"${message.name}"`,
+            `"${message.email}"`,
+            `"${message.phone || ''}"`,
+            `"${message.subject}"`,
+            `"${message.message.replace(/"/g, '""')}"`,
+            `"${message.waktu}"`,
+            `"${message.status}"`
+          ];
+          csvRows.push(row.join(','));
+        });
+        
+        return csvRows.join('\n');
+      }
+
+      saveMessages() {
+        try {
+          localStorage.setItem('messages', JSON.stringify(this.messages));
+          this.lastUpdate = Date.now();
+        } catch (error) {
+          console.error('Error saving messages:', error);
+          this.showNotification('Gagal menyimpan data', 'error');
+        }
+      }
+
+      logout() {
+        if (confirm('Apakah Anda yakin ingin logout?')) {
+          localStorage.removeItem('adminAuthenticated');
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('userRole');
+          this.showNotification('Logout berhasil', 'success');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 1000);
+        }
+      }
+
+      showNotification(message, type) {
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.notification');
+        existingNotifications.forEach(notification => notification.remove());
+
+        // Create new notification
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'exclamation-triangle'}"></i>
+          <span>${message}</span>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.remove();
+          }
+        }, 3000);
+      }
+
+      capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+    }
+
+    // Initialize admin dashboard
+    const adminDashboard = new AdminDashboard();
+
+    // Handle page visibility changes for auto-refresh
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        adminDashboard.stopAutoRefresh();
+      } else {
+        adminDashboard.startAutoRefresh();
+        adminDashboard.refreshData();
+      }
+    });
+
+    // Handle beforeunload to clean up
+    window.addEventListener('beforeunload', function() {
+      adminDashboard.stopAutoRefresh();
+    });
+  </script>
+</body>
+</html>

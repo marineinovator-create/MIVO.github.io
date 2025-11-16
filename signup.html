@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Daftar | MIVO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Variables - Tema Kemaritiman */
+    :root {
+      --primary: #006994;
+      --primary-dark: #00567a;
+      --accent: #0088cc;
+      --accent-light: #66c2ff;
+      --ocean-blue: #0077be;
+      --sea-green: #2e8b57;
+      --wave-teal: #40e0d0;
+      --sand-beige: #f5deb3;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --neutral: #6b7280;
+      --neutral-light: #9ca3af;
+      --neutral-dark: #374151;
+      --background: #f0f8ff;
+      --card-bg: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--wave-teal) 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--neutral-dark);
+      line-height: 1.6;
+    }
+
+    /* Header dengan Tema Kemaritiman */
+    .site-header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0, 105, 148, 0.1);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .brand:hover {
+      transform: scale(1.05);
+    }
+
+    .brand img {
+      width: 70px !important;
+      height: 70px !important;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 105, 148, 0.3);
+      border: 2px solid var(--accent);
+    }
+
+    /* Hapus teks MIVO - hanya logo saja */
+    .brand span {
+      display: none;
+    }
+
+    /* Main Auth Container dengan Background Laut */
+    .auth-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Efek gelombang laut */
+    .auth-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(64, 224, 208, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 136, 204, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 119, 190, 0.2) 0%, transparent 50%);
+      z-index: -1;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      padding: 3rem;
+      width: 100%;
+      max-width: 500px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--wave-teal), var(--ocean-blue));
+    }
+
+    /* Auth Header dengan Ikon yang Sesuai */
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--wave-teal), var(--ocean-blue));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: white;
+      box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+    }
+
+    .auth-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--ocean-blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+      color: var(--neutral);
+      font-size: 1rem;
+    }
+
+    /* Form Styles dengan Warna Laut */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: var(--ocean-blue);
+      font-size: 0.9rem;
+    }
+
+    .input-with-icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      color: var(--accent);
+      z-index: 2;
+    }
+
+    .input-with-icon input,
+    .input-with-icon select {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+      font-family: inherit;
+    }
+
+    .input-with-icon input:focus,
+    .input-with-icon select:focus {
+      outline: none;
+      border-color: var(--wave-teal);
+      box-shadow: 0 0 0 4px rgba(64, 224, 208, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .input-with-icon input.error,
+    .input-with-icon select.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+    }
+
+    .input-with-icon input.success,
+    .input-with-icon select.success {
+      border-color: var(--success);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: color 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      color: var(--ocean-blue);
+    }
+
+    .input-hint {
+      font-size: 0.8rem;
+      color: var(--neutral);
+      margin-top: 0.25rem;
+    }
+
+    /* Password Strength dengan Warna Laut */
+    .password-strength {
+      margin-top: 0.5rem;
+    }
+
+    .strength-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .strength-fill.weak {
+      width: 33%;
+      background: var(--danger);
+    }
+
+    .strength-fill.medium {
+      width: 66%;
+      background: var(--warning);
+    }
+
+    .strength-fill.strong {
+      width: 100%;
+      background: var(--sea-green);
+    }
+
+    .strength-text {
+      font-size: 0.8rem;
+      color: var(--neutral);
+    }
+
+    /* Checkbox Styles */
+    .form-options {
+      margin: 0.5rem 0;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--neutral-dark);
+      line-height: 1.4;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      display: none;
+    }
+
+    .checkmark {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      margin-top: 0.1rem;
+    }
+
+    .checkmark::after {
+      content: '✓';
+      color: white;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .checkbox-label input[type="checkbox"]:checked + .checkmark {
+      background: var(--sea-green);
+      border-color: var(--sea-green);
+    }
+
+    .checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+      opacity: 1;
+    }
+
+    .link {
+      color: var(--ocean-blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+      color: var(--accent);
+    }
+
+    /* Button Styles dengan Warna Laut */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--ocean-blue), var(--wave-teal));
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 119, 190, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 119, 190, 0.6);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-loading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .loading-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Auth Footer */
+    .auth-footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .auth-footer p {
+      color: var(--neutral);
+      font-size: 0.9rem;
+    }
+
+    .auth-link {
+      color: var(--ocean-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .auth-link:hover {
+      text-decoration: underline;
+      color: var(--accent);
+    }
+
+    .brand img {
+  width: 150px !important;
+  height: 50px !important;
+  border-radius: 12px;
+}
+    /* Demo Notes dengan Warna Laut */
+    .demo-notes {
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      border: 1px solid var(--wave-teal);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      color: var(--ocean-blue);
+    }
+
+    .demo-content {
+      font-size: 0.85rem;
+      color: var(--neutral-dark);
+    }
+
+    .demo-content ul {
+      padding-left: 1.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .demo-content li {
+      margin-bottom: 0.25rem;
+    }
+
+    /* Error Messages */
+    .error-message {
+      color: var(--danger);
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    /* Success State */
+    .form-group.success .input-icon {
+      color: var(--success);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .auth-container {
+        padding: 1rem;
+      }
+
+      .auth-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .auth-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .auth-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+
+      .brand img {
+        width: 60px !important;
+        height: 60px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 1.5rem 1rem;
+      }
+
+      .header-inner {
+        padding: 0 1rem;
+      }
+      
+      .brand img {
+        width: 55px !important;
+        height: 55px !important;
+      }
+    }
+
+    /* Utility Classes */
+    .hidden {
+      display: none !important;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">
+        <img src="logo mivo.png" alt="MIVO Logo" style="width: 70px; height: 70px;" />
+        <!-- Teks MIVO dihapus, hanya logo saja -->
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="auth-container">
+    <div class="auth-card fade-in">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <i class="fas fa-anchor"></i>
+        </div>
+        <h1>Daftar Akun Baru</h1>
+        <p>Bergabunglah dengan revolusi energi biru Indonesia</p>
+      </div>
+
+      <!-- FORM DAFTAR YANG LENGKAP -->
+      <form id="signupForm" class="auth-form">
+        <div class="form-group">
+          <label for="signupId">ID Pengguna</label>
+          <div class="input-with-icon">
+            <span class="input-icon"><i class="fas fa-user"></i></span>
+            <input type="text" id="signupId" name="userId" required placeholder="contoh: nelayan001" />
+          </div>
+          <div class="input-hint">Gunakan huruf dan angka tanpa spasi</div>
+          <div class="error-message" id="userIdError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="signupName">Nama Lengkap</label>
+          <div class="input-with-icon">
+            <span class="input-icon"><i class="fas fa-signature"></i></span>
+            <input type="text" id="signupName" name="fullName" required placeholder="Nama Lengkap Anda" />
+          </div>
+          <div class="error-message" id="nameError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="signupEmail">Email</label>
+          <div class="input-with-icon">
+            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+            <input type="email" id="signupEmail" name="email" required placeholder="email@contoh.com" />
+          </div>
+          <div class="error-message" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="signupPhone">Nomor Telepon</label>
+          <div class="input-with-icon">
+            <span class="input-icon"><i class="fas fa-phone"></i></span>
+            <input type="tel" id="signupPhone" name="phone" placeholder="08xxxxxxxxxx" />
+          </div>
+          <div class="error-message" id="phoneError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="signupRole">Peran</label>
+          <div class="input-with-icon">
+            <span class="input-icon"><i class="fas fa-briefcase"></i></span>
+            <select id="signupRole" name="role" required>
+              <option value="">Pilih peran...</option>
+              <option value="pengunjung">Pengunjung</option>
+              <option value="pengguna">Pengguna</option>
+              <option value="mitra">Mitra Bisnis</option>
+              <option value="peneliti">Peneliti</option>
+            </select>
+          </div>
+          <div class="error-message" id="roleError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="signupPassword">Kata Sandi</label>
+          <div class="input-with-icon">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input type="password" id="signupPassword" name="password" required placeholder="Buat kata sandi" />
+            <button type="button" class="password-toggle" id="signupPasswordToggle">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div class="strength-fill" id="strengthFill"></div>
+            </div>
+            <span class="strength-text" id="strengthText">Kekuatan kata sandi</span>
+          </div>
+          <div class="error-message" id="passwordError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+          <div class="input-with-icon">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Ulangi kata sandi" />
+            <button type="button" class="password-toggle" id="confirmPasswordToggle">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="error-message" id="confirmPasswordError"></div>
+        </div>
+
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" required />
+            <span class="checkmark"></span>
+            Saya menyetujui <a href="#" class="link">Syarat & Ketentuan</a> dan <a href="#" class="link">Kebijakan Privasi</a>
+          </label>
+          <div class="error-message" id="termsError"></div>
+        </div>
+
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="newsletter" name="newsletter" />
+            <span class="checkmark"></span>
+            Saya ingin menerima newsletter tentang perkembangan energi biru
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="signupBtn">
+          <span class="btn-text">Daftar Sekarang</span>
+          <div class="btn-loading hidden">
+            <div class="loading-spinner"></div>
+            Membuat akun...
+          </div>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Sudah punya akun? <a href="login.html" class="auth-link">Login di sini</a></p>
+      </div>
+
+      <div class="demo-notes">
+        <div class="demo-header">
+          <i class="fas fa-compass"></i>
+          <span>Informasi Demo</span>
+        </div>
+        <div class="demo-content">
+          <p><strong>Fitur demo:</strong></p>
+          <ul>
+            <li>Akun disimpan di browser (localStorage)</li>
+            <li>Gunakan ID unik untuk setiap pendaftaran</li>
+            <li>ID admin01-admin20 khusus untuk administrator</li>
+            <li>Setelah daftar, gunakan ID dan password untuk login</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // JavaScript untuk Form Sign Up
+    class SignUpForm {
+      constructor() {
+        this.form = document.getElementById('signupForm');
+        this.passwordInput = document.getElementById('signupPassword');
+        this.confirmPasswordInput = document.getElementById('confirmPassword');
+        this.strengthFill = document.getElementById('strengthFill');
+        this.strengthText = document.getElementById('strengthText');
+        
+        this.init();
+      }
+
+      init() {
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        // Password strength indicator
+        this.passwordInput.addEventListener('input', () => {
+          this.updatePasswordStrength();
+        });
+
+        // Password toggle visibility
+        document.getElementById('signupPasswordToggle').addEventListener('click', () => {
+          this.togglePasswordVisibility(this.passwordInput, 'signupPasswordToggle');
+        });
+
+        document.getElementById('confirmPasswordToggle').addEventListener('click', () => {
+          this.togglePasswordVisibility(this.confirmPasswordInput, 'confirmPasswordToggle');
+        });
+
+        // Form submission
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+      }
+
+      updatePasswordStrength() {
+        const password = this.passwordInput.value;
+        let strength = 0;
+        let text = 'Kekuatan kata sandi';
+        let className = '';
+
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+        if (password.match(/\d/)) strength++;
+        if (password.match(/[^a-zA-Z\d]/)) strength++;
+
+        switch (strength) {
+          case 0:
+          case 1:
+            text = 'Lemah';
+            className = 'weak';
+            break;
+          case 2:
+          case 3:
+            text = 'Sedang';
+            className = 'medium';
+            break;
+          case 4:
+            text = 'Kuat';
+            className = 'strong';
+            break;
+        }
+
+        this.strengthFill.className = `strength-fill ${className}`;
+        this.strengthText.textContent = text;
+      }
+
+      togglePasswordVisibility(input, toggleId) {
+        const toggle = document.getElementById(toggleId);
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        toggle.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+      }
+
+      async handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!this.validateForm()) {
+          return;
+        }
+
+        this.setLoading(true);
+
+        try {
+          const formData = this.getFormData();
+          await this.submitForm(formData);
+          this.showSuccessMessage();
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+        } catch (error) {
+          this.showErrorMessage(error.message);
+        } finally {
+          this.setLoading(false);
+        }
+      }
+
+      validateForm() {
+        const userId = document.getElementById('signupId').value.trim();
+        const name = document.getElementById('signupName').value.trim();
+        const email = document.getElementById('signupEmail').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const role = document.getElementById('signupRole').value;
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+
+        // Reset errors
+        this.clearErrors();
+
+        let isValid = true;
+
+        // User ID validation
+        if (!userId) {
+          this.showError('userIdError', 'ID Pengguna wajib diisi');
+          isValid = false;
+        } else if (!/^[a-zA-Z0-9]+$/.test(userId)) {
+          this.showError('userIdError', 'ID Pengguna hanya boleh mengandung huruf dan angka');
+          isValid = false;
+        }
+
+        // Prevent using admin IDs
+        const adminIds = ['admin01', 'admin02', 'admin03', 'admin04', 'admin05', 
+                         'admin06', 'admin07', 'admin08', 'admin09', 'admin10',
+                         'admin11', 'admin12', 'admin13', 'admin14', 'admin15',
+                         'admin16', 'admin17', 'admin18', 'admin19', 'admin20'];
+
+        if (adminIds.includes(userId.toLowerCase())) {
+          this.showError('userIdError', 'ID Pengguna ini khusus untuk administrator');
+          isValid = false;
+        }
+
+        // Name validation
+        if (!name) {
+          this.showError('nameError', 'Nama lengkap wajib diisi');
+          isValid = false;
+        }
+
+        // Email validation
+        if (!email) {
+          this.showError('emailError', 'Email wajib diisi');
+          isValid = false;
+        } else if (!this.isValidEmail(email)) {
+          this.showError('emailError', 'Format email tidak valid');
+          isValid = false;
+        }
+
+        // Role validation
+        if (!role) {
+          this.showError('roleError', 'Peran wajib dipilih');
+          isValid = false;
+        }
+
+        // Password validation
+        if (!password) {
+          this.showError('passwordError', 'Kata sandi wajib diisi');
+          isValid = false;
+        } else if (password.length < 6) {
+          this.showError('passwordError', 'Kata sandi minimal 6 karakter');
+          isValid = false;
+        }
+
+        // Confirm password validation
+        if (!confirmPassword) {
+          this.showError('confirmPasswordError', 'Konfirmasi kata sandi wajib diisi');
+          isValid = false;
+        } else if (password !== confirmPassword) {
+          this.showError('confirmPasswordError', 'Kata sandi tidak cocok');
+          isValid = false;
+        }
+
+        // Terms validation
+        if (!agreeTerms) {
+          this.showError('termsError', 'Anda harus menyetujui syarat dan ketentuan');
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      showError(elementId, message) {
+        const element = document.getElementById(elementId);
+        element.textContent = message;
+        element.classList.add('show');
+        
+        // Add error class to input
+        const input = document.querySelector(`#${elementId.replace('Error', '')}`);
+        if (input) {
+          input.classList.add('error');
+        }
+      }
+
+      clearErrors() {
+        const errorElements = document.querySelectorAll('.error-message');
+        errorElements.forEach(element => {
+          element.classList.remove('show');
+          element.textContent = '';
+        });
+
+        const errorInputs = document.querySelectorAll('.error, .success');
+        errorInputs.forEach(input => {
+          input.classList.remove('error', 'success');
+        });
+      }
+
+      isValidEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+      }
+
+      getFormData() {
+        return {
+          userId: document.getElementById('signupId').value.trim(),
+          name: document.getElementById('signupName').value.trim(),
+          email: document.getElementById('signupEmail').value.trim(),
+          phone: document.getElementById('signupPhone').value.trim(),
+          role: document.getElementById('signupRole').value,
+          password: document.getElementById('signupPassword').value,
+          newsletter: document.getElementById('newsletter').checked,
+          createdAt: new Date().toISOString()
+        };
+      }
+
+      async submitForm(formData) {
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Save to localStorage
+        try {
+          let users = JSON.parse(localStorage.getItem('users')) || [];
+          
+          // Check if user ID already exists
+          if (users.some(user => user.userId === formData.userId)) {
+            throw new Error('ID Pengguna sudah digunakan');
+          }
+          
+          // Check if email already exists
+          if (users.some(user => user.email === formData.email)) {
+            throw new Error('Email sudah terdaftar');
+          }
+          
+          users.push(formData);
+          localStorage.setItem('users', JSON.stringify(users));
+          
+          return { success: true, message: 'Akun berhasil dibuat!' };
+        } catch (error) {
+          throw new Error(error.message || 'Gagal membuat akun. Coba lagi.');
+        }
+      }
+
+      setLoading(loading) {
+        const btn = document.getElementById('signupBtn');
+        const btnText = btn.querySelector('.btn-text');
+        const btnLoading = btn.querySelector('.btn-loading');
+        
+        if (loading) {
+          btnText.classList.add('hidden');
+          btnLoading.classList.remove('hidden');
+          btn.disabled = true;
+        } else {
+          btnText.classList.remove('hidden');
+          btnLoading.classList.add('hidden');
+          btn.disabled = false;
+        }
+      }
+
+      showSuccessMessage() {
+        alert('Akun berhasil dibuat! Anda akan diarahkan ke halaman login.');
+      }
+
+      showErrorMessage(message) {
+        alert(`Error: ${message}`);
+      }
+    }
+
+    // Initialize sign up form when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      new SignUpForm();
+    });
+  </script>
+</body>
+</html>

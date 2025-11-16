@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | MIVO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables - Tema Kemaritiman */
+        :root {
+            --primary: #006994;
+            --primary-dark: #00567a;
+            --accent: #0088cc;
+            --accent-light: #66c2ff;
+            --ocean-blue: #0077be;
+            --sea-green: #2e8b57;
+            --wave-teal: #40e0d0;
+            --sand-beige: #f5deb3;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --neutral: #6b7280;
+            --neutral-light: #9ca3af;
+            --neutral-dark: #374151;
+            --background: #f0f8ff;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--wave-teal) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--neutral-dark);
+            line-height: 1.6;
+        }
+
+        /* Header dengan Tema Kemaritiman */
+        .site-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 105, 148, 0.1);
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .brand:hover {
+            transform: scale(1.05);
+        }
+
+        .brand img {
+            width: 70px !important;
+            height: 70px !important;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 105, 148, 0.3);
+            border: 2px solid var(--accent);
+        }
+
+        /* Hapus teks MIVO - hanya logo saja */
+        .brand span {
+            display: none;
+        }
+
+        /* Main Auth Container */
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efek gelombang laut */
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(64, 224, 208, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 136, 204, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 119, 190, 0.2) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--wave-teal), var(--ocean-blue));
+        }
+
+        /* Auth Header */
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .auth-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--wave-teal), var(--ocean-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+        }
+
+        .auth-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--ocean-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: var(--neutral);
+            font-size: 1rem;
+        }
+
+        /* Form Styles */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--ocean-blue);
+            font-size: 0.9rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            color: var(--accent);
+            z-index: 2;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        .input-with-icon input:focus {
+            outline: none;
+            border-color: var(--wave-teal);
+            box-shadow: 0 0 0 4px rgba(64, 224, 208, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-with-icon input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--ocean-blue);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Remember Me & Forgot Password */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--neutral-dark);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .checkmark::after {
+            content: '✓';
+            color: white;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkmark {
+            background: var(--sea-green);
+            border-color: var(--sea-green);
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+            opacity: 1;
+        }
+
+        .forgot-password {
+            color: var(--ocean-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+            color: var(--accent);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ocean-blue), var(--wave-teal));
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 119, 190, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 119, 190, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-loading {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .loading-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Auth Footer */
+        .auth-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .auth-footer p {
+            color: var(--neutral);
+            font-size: 0.9rem;
+        }
+
+        .auth-link {
+            color: var(--ocean-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+            color: var(--accent);
+        }
+
+        /* Demo Notes */
+        .demo-notes {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            border: 1px solid var(--wave-teal);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--ocean-blue);
+        }
+
+        .demo-content {
+            font-size: 0.85rem;
+            color: var(--neutral-dark);
+        }
+
+        .demo-content ul {
+            padding-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .demo-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Demo Accounts */
+        .demo-accounts {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .demo-accounts h4 {
+            color: var(--warning);
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .account-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .account-info {
+            flex: 1;
+        }
+
+        .account-role {
+            font-size: 0.75rem;
+            color: var(--neutral);
+            margin-top: 0.1rem;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--ocean-blue);
+        }
+
+        .brand img {
+         width: 150px !important;
+         height: 50px !important;
+         border-radius: 12px;
+          }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-container {
+                padding: 1rem;
+            }
+
+            .auth-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .auth-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .auth-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .brand img {
+                width: 60px !important;
+                height: 60px !important;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .header-inner {
+                padding: 0 1rem;
+            }
+            
+            .brand img {
+                width: 55px !important;
+                height: 55px !important;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+    <div class="header-inner">
+        <a class="brand" href="index.html">
+            <img src="logo mivo.png" alt="MIVO Logo" style="width: 70px; height: 70px;" />
+        </a>
+    </div>
+</header>
+
+<!-- LOGIN FORM -->
+<section class="auth-container">
+    <div class="auth-card fade-in">
+        <div class="auth-header">
+            <div class="auth-icon">
+                <i class="fas fa-ship"></i>
+            </div>
+            <h1>Login Pengguna</h1>
+            <p>Masuk ke akun MIVO Anda</p>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+            <div class="form-group">
+                <label for="loginId">ID Pengguna</label>
+                <div class="input-with-icon">
+                    <span class="input-icon"><i class="fas fa-user"></i></span>
+                    <input type="text" id="loginId" placeholder="Masukkan ID Pengguna" required />
+                </div>
+                <div class="error-message" id="userIdError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <div class="input-with-icon">
+                    <span class="input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" id="loginPassword" placeholder="Masukkan Password" required />
+                    <button type="button" class="password-toggle" id="passwordToggle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="rememberMe" />
+                    <span class="checkmark"></span>
+                    Ingat saya
+                </label>
+                <a href="#" class="forgot-password">Lupa password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+                <span class="btn-text">Masuk</span>
+                <div class="btn-loading hidden">
+                    <div class="loading-spinner"></div>
+                    Memproses...
+                </div>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Belum punya akun? <a href="signup.html" class="auth-link">Daftar di sini</a></p>
+        </div>
+
+        <!-- Demo Accounts untuk Testing -->
+        <div class="demo-accounts">
+            <h4><i class="fas fa-vial"></i> Akun Demo (Klik untuk copy)</h4>
+            <div class="account-list">
+                <div class="account-item">
+                    <div class="account-info">
+                        <strong>admin01</strong>
+                        <div class="account-role">Super Admin - akses penuh</div>
+                    </div>
+                    <button class="copy-btn" data-username="admin01" data-password="admin123">Copy</button>
+                </div>
+                <div class="account-item">
+                    <div class="account-info">
+                        <strong>admin06</strong>
+                        <div class="account-role">Admin Biasa - akses terbatas</div>
+                    </div>
+                    <button class="copy-btn" data-username="admin06" data-password="admin123">Copy</button>
+                </div>
+                <div class="account-item">
+                    <div class="account-info">
+                        <strong>user01</strong>
+                        <div class="account-role">User - akses terbatas</div>
+                    </div>
+                    <button class="copy-btn" data-username="user01" data-password="user123">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-notes">
+            <div class="demo-header">
+                <i class="fas fa-info-circle"></i>
+                <span>Informasi Login</span>
+            </div>
+            <div class="demo-content">
+                <p><strong>Untuk mengakses Dashboard Admin:</strong></p>
+                <ul>
+                    <li><strong>Super Admin (akses penuh):</strong> admin01 - admin05</li>
+                    <li><strong>Admin Biasa:</strong> admin06 - admin20</li>
+                    <li><strong>Password semua admin:</strong> admin123</li>
+                    <li>Klik tombol "Copy" pada akun admin di atas</li>
+                </ul>
+                <p><strong>Akun User Terdaftar:</strong></p>
+                <ul>
+                    <li>ID dan password dari pendaftaran</li>
+                    <li>Data tersimpan di browser (localStorage)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // JavaScript untuk Login Form
+    class LoginForm {
+        constructor() {
+            this.form = document.getElementById('loginForm');
+            this.passwordInput = document.getElementById('loginPassword');
+            this.init();
+        }
+
+        init() {
+            this.setupEventListeners();
+            this.setupDemoAccounts();
+        }
+
+        setupEventListeners() {
+            // Password toggle visibility
+            document.getElementById('passwordToggle').addEventListener('click', () => {
+                this.togglePasswordVisibility();
+            });
+
+            // Form submission
+            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
+
+        setupDemoAccounts() {
+            // Copy demo account credentials
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const username = btn.dataset.username;
+                    const password = btn.dataset.password;
+                    
+                    document.getElementById('loginId').value = username;
+                    document.getElementById('loginPassword').value = password;
+                    
+                    // Show success feedback
+                    const originalText = btn.textContent;
+                    btn.textContent = '✓ Disalin';
+                    btn.style.background = 'var(--success)';
+                    
+                    setTimeout(() => {
+                        btn.textContent = 'Copy';
+                        btn.style.background = 'var(--accent)';
+                    }, 2000);
+                });
+            });
+        }
+
+        togglePasswordVisibility() {
+            const toggle = document.getElementById('passwordToggle');
+            const type = this.passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            this.passwordInput.setAttribute('type', type);
+            toggle.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        }
+
+        async handleSubmit(e) {
+            e.preventDefault();
+            
+            if (!this.validateForm()) {
+                return;
+            }
+
+            this.setLoading(true);
+
+            try {
+                const formData = this.getFormData();
+                const result = await this.submitLogin(formData);
+                this.showSuccessMessage(result.message);
+                
+                // Redirect based on role
+                setTimeout(() => {
+                    if (result.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 1500);
+            } catch (error) {
+                this.showErrorMessage(error.message);
+            } finally {
+                this.setLoading(false);
+            }
+        }
+
+        validateForm() {
+            const userId = document.getElementById('loginId').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            // Reset errors
+            this.clearErrors();
+
+            let isValid = true;
+
+            // User ID validation
+            if (!userId) {
+                this.showError('userIdError', 'ID Pengguna wajib diisi');
+                isValid = false;
+            }
+
+            // Password validation
+            if (!password) {
+                this.showError('passwordError', 'Password wajib diisi');
+                isValid = false;
+            } else if (password.length < 3) {
+                this.showError('passwordError', 'Password terlalu pendek');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.classList.add('show');
+            
+            // Add error class to input
+            const input = document.querySelector(`#${elementId.replace('Error', '')}`);
+            if (input) {
+                input.classList.add('error');
+            }
+        }
+
+        clearErrors() {
+            const errorElements = document.querySelectorAll('.error-message');
+            errorElements.forEach(element => {
+                element.classList.remove('show');
+                element.textContent = '';
+            });
+
+            const errorInputs = document.querySelectorAll('.error');
+            errorInputs.forEach(input => {
+                input.classList.remove('error');
+            });
+        }
+
+        getFormData() {
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            return {
+                userId: document.getElementById('loginId').value.trim(),
+                password: document.getElementById('loginPassword').value,
+                rememberMe: rememberMe
+            };
+        }
+
+        async submitLogin(formData) {
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Check from localStorage users first
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let user = users.find(u => u.userId === formData.userId && u.password === formData.password);
+            
+            let role = 'user';
+            let message = 'Login berhasil!';
+            let adminType = 'admin'; // Default admin type
+            
+            // ✅ ADMIN KHUSUS: admin01 sampai admin20 dengan password admin123
+            const adminAccounts = [];
+            
+            // 5 ADMIN SUPER (akses penuh)
+            const superAdmins = ['admin01', 'admin02', 'admin03', 'admin04', 'admin05'];
+            
+            // 15 ADMIN BIASA
+            const regularAdmins = [];
+            for (let i = 6; i <= 20; i++) {
+                regularAdmins.push(`admin${i.toString().padStart(2, '0')}`);
+            }
+            
+            // Generate semua admin accounts
+            for (let i = 1; i <= 20; i++) {
+                const adminId = `admin${i.toString().padStart(2, '0')}`;
+                const isSuperAdmin = superAdmins.includes(adminId);
+                
+                adminAccounts.push({
+                    userId: adminId,
+                    password: 'admin123',
+                    role: 'admin',
+                    name: isSuperAdmin ? `Super Admin ${i}` : `Admin ${i}`,
+                    adminType: isSuperAdmin ? 'super' : 'regular'
+                });
+            }
+
+            // Cek admin khusus terlebih dahulu
+            const adminAccount = adminAccounts.find(acc => 
+                acc.userId === formData.userId && acc.password === formData.password
+            );
+
+            if (adminAccount) {
+                role = 'admin';
+                adminType = adminAccount.adminType;
+                message = adminType === 'super' 
+                    ? 'Login Super Admin berhasil! Akses penuh diberikan.' 
+                    : 'Login Admin berhasil!';
+                localStorage.setItem('adminAuthenticated', 'true');
+                localStorage.setItem('userRole', 'admin');
+                localStorage.setItem('adminType', adminType); // Simpan tipe admin
+            } 
+            // Check registered users
+            else if (user) {
+                role = user.role || 'user';
+                message = 'Login berhasil! Mengarahkan ke beranda...';
+                localStorage.setItem('userRole', role);
+            }
+            // Invalid credentials
+            else {
+                throw new Error('ID Pengguna atau password salah!');
+            }
+            
+            // Save common user data
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', formData.userId);
+            localStorage.setItem('userId', formData.userId);
+            
+            // Remember me functionality
+            if (formData.rememberMe) {
+                localStorage.setItem('rememberedUser', formData.userId);
+            } else {
+                localStorage.removeItem('rememberedUser');
+            }
+            
+            return { 
+                success: true, 
+                message: message,
+                role: role,
+                adminType: adminType
+            };
+        }
+
+        setLoading(loading) {
+            const btn = document.getElementById('loginBtn');
+            const btnText = btn.querySelector('.btn-text');
+            const btnLoading = btn.querySelector('.btn-loading');
+            
+            if (loading) {
+                btnText.classList.add('hidden');
+                btnLoading.classList.remove('hidden');
+                btn.disabled = true;
+            } else {
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+                btn.disabled = false;
+            }
+        }
+
+        showSuccessMessage(message) {
+            // Create success notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        showErrorMessage(message) {
+            // Create error notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--danger);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    }
+
+    // Initialize login form when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        new LoginForm();
+        
+        // Check if there's a remembered user
+        const rememberedUser = localStorage.getItem('rememberedUser');
+        if (rememberedUser) {
+            document.getElementById('loginId').value = rememberedUser;
+            document.getElementById('rememberMe').checked = true;
+        }
+
+        // Add slideIn animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    });
+</script>
+
+</body>
+</html>

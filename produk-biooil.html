@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioOil | MIVO - Marine Inovator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* HANYA style tambahan untuk elemen interaktif baru */
+    
+    /* Enhanced Pyrolysis Process Visualization */
+    .pyrolysis-visualization {
+      width: 100%;
+      height: 500px;
+      position: relative;
+      margin: 3rem 0;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+    
+    .reactor-container {
+      position: absolute;
+      width: 200px;
+      height: 350px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .reactor-tank {
+      width: 150px;
+      height: 250px;
+      background: linear-gradient(to bottom, #3b82f6 0%, #1e40af 100%);
+      border-radius: 75px 75px 10px 10px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+      border: 3px solid #1e40af;
+    }
+    
+    .biomass-particles {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 40%;
+      background: linear-gradient(to top, #059669 0%, #047857 100%);
+      border-radius: 0 0 75px 75px;
+    }
+    
+    .heat-glow {
+      position: absolute;
+      bottom: 40%;
+      width: 100%;
+      height: 60%;
+      background: linear-gradient(to top, rgba(249, 115, 22, 0.8) 0%, rgba(251, 146, 60, 0.4) 50%, transparent 100%);
+      animation: heatPulse 2s infinite alternate;
+    }
+    
+    @keyframes heatPulse {
+      0% { opacity: 0.6; }
+      100% { opacity: 0.9; }
+    }
+    
+    .gas-bubble {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: rise 3s infinite ease-in;
+    }
+    
+    @keyframes rise {
+      0% {
+        transform: translateY(0) scale(0.3);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-200px) scale(1);
+        opacity: 0;
+      }
+    }
+    
+    .product-output {
+      position: absolute;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      bottom: 50px;
+    }
+    
+    .output-item {
+      text-align: center;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .output-icon {
+      width: 60px;
+      height: 60px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      color: white;
+      font-size: 1.5rem;
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .output-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    .output-value {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-top: 5px;
+    }
+    
+    /* Interactive Process Steps */
+    .interactive-process {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 3rem 0;
+      padding: 0 2rem;
+    }
+    
+    .interactive-process::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 50px;
+      right: 50px;
+      height: 3px;
+      background: #3b82f6;
+      z-index: 1;
+    }
+    
+    .process-step-interactive {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      cursor: pointer;
+    }
+    
+    .process-dot {
+      width: 80px;
+      height: 80px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+      font-size: 2rem;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .process-dot::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+    }
+    
+    .process-step-interactive:hover .process-dot {
+      transform: scale(1.1);
+      box-shadow: 0 12px 30px rgba(59, 130, 246, 0.6);
+    }
+    
+    .process-step-interactive:hover .process-dot::after {
+      transform: rotate(45deg) translate(50%, 50%);
+    }
+    
+    .process-step-interactive.active .process-dot {
+      background: #1e40af;
+      transform: scale(1.15);
+    }
+    
+    .process-content {
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+      max-height: 0;
+      overflow: hidden;
+    }
+    
+    .process-step-interactive.active .process-content {
+      opacity: 1;
+      max-height: 200px;
+    }
+    
+    /* Enhanced Data Visualization */
+    .performance-dashboard {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .metric-card-enhanced {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .metric-card-enhanced::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      transition: left 0.3s ease;
+    }
+    
+    .metric-card-enhanced:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+    }
+    
+    .metric-card-enhanced:hover::before {
+      left: 0;
+    }
+    
+    .metric-value-enhanced {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .metric-icon {
+      font-size: 1.5rem;
+      opacity: 0.8;
+    }
+    
+    .metric-label-enhanced {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+    
+    /* Interactive Yield Chart */
+    .yield-comparison {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .yield-bars {
+      display: flex;
+      align-items: end;
+      height: 250px;
+      gap: 2rem;
+      margin: 2rem 0;
+      padding: 0 1rem;
+      position: relative;
+    }
+    
+    .yield-bar-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .yield-bar-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .yield-bar {
+      width: 100%;
+      background: linear-gradient(to top, #3b82f6, #60a5fa);
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      transition: all 0.4s ease;
+      min-height: 20px;
+    }
+    
+    .yield-bar-item:hover .yield-bar {
+      transform: scaleY(1.05);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .yield-label {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    .yield-value {
+      position: absolute;
+      top: -30px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .yield-bar-item:hover .yield-value {
+      opacity: 1;
+    }
+    
+    /* Feedstock Comparison */
+    .feedstock-interactive {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .feedstock-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .feedstock-card {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .feedstock-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.1);
+    }
+    
+    .feedstock-card.recommended {
+      border-color: #10b981;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    }
+    
+    .feedstock-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feedstock-rating {
+      color: #f59e0b;
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+    
+    /* Enhanced ROI Calculator */
+    .roi-calculator-enhanced {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .calculator-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .input-group label {
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.9rem;
+    }
+    
+    .input-group input {
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .input-group input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+    
+    .roi-results {
+      display: none;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+      border: 1px solid #e5e7eb;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .result-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+    
+    .result-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-bottom: 0.5rem;
+    }
+    
+    .result-label {
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+
+    /* Remove sales elements */
+    .product-actions,
+    .product-pricing,
+    .product-rating,
+    .reviews-section,
+    .consultation-modal {
+      display: none !important;
+    }
+
+    /* Enhanced product info for information only */
+    .product-info-enhanced {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #e2e8f0;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .info-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-icon {
+      font-size: 2.5rem;
+      color: #3b82f6;
+      margin-bottom: 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .pyrolysis-visualization {
+        height: 400px;
+      }
+      
+      .reactor-container {
+        transform: translate(-50%, -50%) scale(0.8);
+      }
+      
+      .interactive-process {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      
+      .interactive-process::before {
+        display: none;
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .yield-bars {
+        flex-direction: column;
+        height: auto;
+        gap: 1rem;
+      }
+      
+      .yield-bar-item {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .yield-bar {
+        height: 40px !important;
+        width: 100%;
+        border-radius: 8px;
+      }
+      
+      .yield-value {
+        position: static;
+        opacity: 1;
+        width: auto;
+      }
+      
+      .feedstock-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .calculator-inputs {
+        grid-template-columns: 1fr;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER - PERSIS SEPERTI ASLINYA -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="index.html">
+        <img src="logo mivo.png" alt="MIVO Logo" />
+      </a>
+
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="produk.html" class="nav-link active">Produk</a>
+    </div>
+  </header>
+
+  <!-- PRODUCT HERO - DIUBAH UNTUK INFORMASI SAJA -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" class="breadcrumb-link">Beranda</a>
+        <a href="produk.html" class="breadcrumb-link">Produk</a>
+        <span class="breadcrumb-current">BioOil</span>
+      </div>
+
+    
+        <div class="product-info">
+          <div class="product-badge">Teknologi Inovatif</div>
+          <h1>BioOil</h1>
+          <p class="product-subtitle">Konversi Biomassa Laut Menjadi Energi Terbarukan</p>
+
+          <p class="product-description">
+            Teknologi pirolisis canggih yang mengkonversi biomassa laut menjadi bio-oil 
+            berkualitas tinggi, menawarkan solusi bahan bakar alternatif yang berkelanjutan 
+            dan ekonomis untuk berbagai aplikasi industri.
+          </p>
+
+          <div class="product-specs">
+            <div class="spec-item">
+              <span class="spec-icon">🛢️</span>
+              <div class="spec-details">
+                <strong>35-45% Yield</strong>
+                <span>Efisiensi Konversi Bio-oil</span>
+              </div>
+            </div>
+            <div class="spec-item">
+              <span class="spec-icon">🔥</span>
+              <div class="spec-details">
+                <strong>400-600°C</strong>
+                <span>Suhu Operasi Pirolisis</span>
+              </div>
+            </div>
+            <div class="spec-item">
+              <span class="spec-icon">⚡</span>
+              <div class="spec-details">
+                <strong>50 kg/jam</strong>
+                <span>Kapasitas Pengolahan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-meta">
+            <div class="meta-item">
+              <span class="meta-label">Status Teknologi:</span>
+              <span class="meta-value available">Tersedia</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Implementasi:</span>
+              <span class="meta-value">4-6 minggu</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Kategori:</span>
+              <span class="meta-value">Energi & Konversi Biomassa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFORMASI TEKNIS -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="product-info-enhanced">
+        <div class="section-header">
+          <h2>Spesifikasi Teknologi</h2>
+          <p>Detail teknis dan kapabilitas sistem BioOil Converter</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-cogs"></i>
+            </div>
+            <h4>Parameter Proses</h4>
+            <p>Suhu: 400-600°C<br>Pressure: Atmospheric<br>Atmosphere: N₂ Inert</p>
+          </div>
+          
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-tachometer-alt"></i>
+            </div>
+            <h4>Kapasitas Sistem</h4>
+            <p>Input: 50 kg/jam<br>Daya: 15 kW<br>Area: 4m × 2.5m × 3m</p>
+          </div>
+          
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <h4>Distribusi Produk</h4>
+            <p>Bio-oil: 40%<br>Biochar: 30%<br>Syngas: 25%</p>
+          </div>
+          
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h4>Bahan Baku</h4>
+            <p>Rumput Laut<br>Limbah Perikanan<br>Biomassa Lainnya</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+  <!-- INTERACTIVE PROCESS STEPS -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="section-header">
+        <h2>Alur Proses Pirolisis</h2>
+        <p>Klik setiap tahap untuk memahami proses konversi biomassa</p>
+      </div>
+
+      <div class="interactive-process">
+        <div class="process-step-interactive active" data-step="1">
+          <div class="process-dot">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <h4>Input Biomassa</h4>
+          <div class="process-content">
+            <p>Biomassa laut (rumput laut, limbah perikanan) dengan kadar air < 15%</p>
+            <small>Kapasitas: 50 kg/jam</small>
+          </div>
+        </div>
+        
+        <div class="process-step-interactive" data-step="2">
+          <div class="process-dot">
+            <i class="fas fa-thermometer-full"></i>
+          </div>
+          <h4>Pemanasan</h4>
+          <div class="process-content">
+            <p>Pemanasan cepat hingga 400-600°C tanpa oksigen</p>
+            <small>Heating rate: 50°C/menit</small>
+          </div>
+        </div>
+        
+        <div class="process-step-interactive" data-step="3">
+          <div class="process-dot">
+            <i class="fas fa-atom"></i>
+          </div>
+          <h4>Pirolisis</h4>
+          <div class="process-content">
+            <p>Dekomposisi termokimia biomassa menjadi vapor</p>
+            <small>Waktu residu: 15-30 menit</small>
+          </div>
+        </div>
+        
+        <div class="process-step-interactive" data-step="4">
+          <div class="process-dot">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h4>Kondensasi</h4>
+          <div class="process-content">
+            <p>Kondensasi vapor menjadi bio-oil cair</p>
+            <small>Suhu kondensasi: 100-150°C</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENHANCED PERFORMANCE DASHBOARD -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="performance-dashboard">
+        <div class="section-header">
+          <h2>Dashboard Performa Sistem</h2>
+          <p>Data real-time efisiensi dan produktivitas BioOil Converter</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card-enhanced">
+            <div class="metric-value-enhanced">
+              <i class="fas fa-chart-line metric-icon"></i>
+              35-45%
+            </div>
+            <div class="metric-label-enhanced">Bio-oil Yield</div>
+          </div>
+          <div class="metric-card-enhanced">
+            <div class="metric-value-enhanced">
+              <i class="fas fa-bolt metric-icon"></i>
+              18-22 MJ/kg
+            </div>
+            <div class="metric-label-enhanced">Heating Value</div>
+          </div>
+          <div class="metric-card-enhanced">
+            <div class="metric-value-enhanced">
+              <i class="fas fa-cogs metric-icon"></i>
+              75%
+            </div>
+            <div class="metric-label-enhanced">Thermal Efficiency</div>
+          </div>
+          <div class="metric-card-enhanced">
+            <div class="metric-value-enhanced">
+              <i class="fas fa-clock metric-icon"></i>
+              2-4 jam
+            </div>
+            <div class="metric-label-enhanced">Processing Time</div>
+          </div>
+        </div>
+
+        <div class="yield-comparison">
+          <h4>Distribusi Hasil Pirolisis Berbagai Biomassa</h4>
+          <p>Hover untuk melihat detail yield setiap bahan baku</p>
+          
+          <div class="yield-bars">
+            <div class="yield-bar-item">
+              <div class="yield-bar" style="height: 70%;">
+                <div class="yield-value">40%</div>
+              </div>
+              <div class="yield-label">Rumput Laut</div>
+            </div>
+            <div class="yield-bar-item">
+              <div class="yield-bar" style="height: 60%; background: linear-gradient(to top, #10b981, #34d399);">
+                <div class="yield-value">35%</div>
+              </div>
+              <div class="yield-label">Limbah Ikan</div>
+            </div>
+            <div class="yield-bar-item">
+              <div class="yield-bar" style="height: 50%; background: linear-gradient(to top, #f59e0b, #fbbf24);">
+                <div class="yield-value">30%</div>
+              </div>
+              <div class="yield-label">Biomassa Darat</div>
+            </div>
+            <div class="yield-bar-item">
+              <div class="yield-bar" style="height: 65%; background: linear-gradient(to top, #8b5cf6, #a78bfa);">
+                <div class="yield-value">38%</div>
+              </div>
+              <div class="yield-label">Campuran</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE FEEDSTOCK COMPARISON -->
+  <section class="technology-diagram">
+    <div class="container">
+      <div class="feedstock-interactive">
+        <div class="section-header">
+          <h2>Komparasi Bahan Baku</h2>
+          <p>Pilih bahan baku untuk melihat performa optimal</p>
+        </div>
+
+        <div class="feedstock-cards">
+          <div class="feedstock-card recommended">
+            <div class="feedstock-icon">🌊</div>
+            <h4>Rumput Laut</h4>
+            <div class="feedstock-rating">★★★★★</div>
+            <div class="output-value">40% Yield</div>
+            <p>Kadar air rendah, konversi tinggi</p>
+          </div>
+          
+          <div class="feedstock-card">
+            <div class="feedstock-icon">🐟</div>
+            <h4>Limbah Ikan</h4>
+            <div class="feedstock-rating">★★★★☆</div>
+            <div class="output-value">35% Yield</div>
+            <p>Kandungan lipid tinggi</p>
+          </div>
+          
+          <div class="feedstock-card">
+            <div class="feedstock-icon">🌿</div>
+            <h4>Biomassa Darat</h4>
+            <div class="feedstock-rating">★★★☆☆</div>
+            <div class="output-value">30% Yield</div>
+            <p>Kadar air variabel</p>
+          </div>
+          
+          <div class="feedstock-card">
+            <div class="feedstock-icon">🔄</div>
+            <h4>Campuran</h4>
+            <div class="feedstock-rating">★★★★☆</div>
+            <div class="output-value">38% Yield</div>
+            <p>Optimasi komposisi</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER - PERSIS SEPERTI ASLINYA -->
+
+  <script>
+    // Gas bubbles animation for pyrolysis visualization
+    function createGasBubbles() {
+      const container = document.getElementById('gas-bubbles-container');
+      const bubbleCount = 8;
+      
+      for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('gas-bubble');
+        
+        // Random size
+        const size = Math.random() * 15 + 5;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        // Random horizontal position
+        const left = Math.random() * 100;
+        bubble.style.left = `${left}%`;
+        
+        // Random animation delay
+        const delay = Math.random() * 6;
+        bubble.style.animationDelay = `${delay}s`;
+        
+        container.appendChild(bubble);
+      }
+    }
+    
+    // Interactive process steps
+    document.querySelectorAll('.process-step-interactive').forEach(step => {
+      step.addEventListener('click', function() {
+        // Remove active class from all steps
+        document.querySelectorAll('.process-step-interactive').forEach(s => {
+          s.classList.remove('active');
+        });
+        
+        // Add active class to clicked step
+        this.classList.add('active');
+      });
+    });
+    
+    // Animated yield bars on load
+    window.addEventListener('load', () => {
+      createGasBubbles();
+      
+      const bars = document.querySelectorAll('.yield-bar');
+      bars.forEach(bar => {
+        const targetHeight = bar.style.height;
+        bar.style.height = '0%';
+        
+        setTimeout(() => {
+          bar.style.height = targetHeight;
+        }, 500);
+      });
+    });
+    
+    // Add floating animation to process dots
+    document.querySelectorAll('.process-dot').forEach((dot, index) => {
+      dot.style.animation = `float 3s ease-in-out ${index * 0.3}s infinite alternate`;
+    });
+    
+    // Add CSS for floating animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-10px); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
